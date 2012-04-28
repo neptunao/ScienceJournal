@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 gem 'rails', '3.2.3'
 
@@ -18,6 +18,15 @@ group :assets do
   gem 'therubyracer', :platform => :ruby
 
   gem 'uglifier', '>= 1.0.3'
+end
+
+group :development do
+  gem 'rspec-rails'
+end
+
+group :test do
+  gem 'rspec-rails'
+  gem 'webrat'
 end
 
 gem 'jquery-rails'
