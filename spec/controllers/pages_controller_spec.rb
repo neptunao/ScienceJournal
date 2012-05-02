@@ -10,11 +10,15 @@ describe PagesController do
     end
     it 'contains login link' do
       get 'home'
-      response.should have_selector('a', href: '/login', content: 'Login' )
+      response.should have_selector('a', href: '/login', content: 'Sign in' )
     end
     it 'contains register link' do
       get 'home'
-      response.should have_selector('a', href: '/register', content: 'Register')
+      response.should have_selector('a', href: '/register', content: 'Sign up')
+    end
+    it 'contains home link' do
+      get 'home'
+      response.should have_selector('a', href: '/', content: 'Home')
     end
   end
 

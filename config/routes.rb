@@ -1,6 +1,5 @@
 ScienceJournal::Application.routes.draw do
   root :to => 'pages#home'
-  get "pages/home"
 
   devise_for :users
   devise_scope :user do

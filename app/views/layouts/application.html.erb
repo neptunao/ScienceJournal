@@ -5,10 +5,24 @@
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 </head>
 <body>
-
-<%= yield %>
-
+    <header class="navbar navbat-fixed-top">
+      <div class="navbar-inner">
+        <nav>
+          <ul class='nav pull-right'>
+            <li><%= link_to 'Sign in', login_path %></li>
+            <li><%= link_to 'Sign up', register_path %></li>
+            <li><%= link_to 'Home', root_path %></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+     <div class="container">
+        <%= yield %>
+     </div>
 </body>
 </html>
