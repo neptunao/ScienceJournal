@@ -5,6 +5,6 @@ include ActionDispatch::Assertions::RoutingAssertions
 
 describe "Routing" do
   it "root page should be registration" do
-    { get:'/' }.should route_to controller: 'devise/sessions', action: 'new'
+    { get:'/' }.should route_to controller: 'pages', action: 'home'
   end
 end

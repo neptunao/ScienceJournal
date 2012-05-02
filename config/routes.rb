@@ -1,7 +1,9 @@
 ScienceJournal::Application.routes.draw do
+  root :to => 'pages#home'
+  get "pages/home"
+
   devise_for :users
   devise_scope :user do
-    get '/' => 'devise/sessions#new'
     get "/login" => "devise/sessions#new"
     get "/register" => "devise/registrations#new"
   end
