@@ -5,6 +5,7 @@ ScienceJournal::Application.routes.draw do
   devise_scope :user do
     get "/login" => "devise/sessions#new"
     get "/register" => "devise/registrations#new"
+    get "/logout" => "devise/sessions#destroy"
   end
 
   # The priority is based upon order of creation:
