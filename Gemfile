@@ -22,12 +22,16 @@ end
 
 group :development do
   gem 'rspec-rails'
+  gem 'guard-rspec'
 end
 
 group :test do
   gem 'rspec-rails'
   gem 'webrat'
   gem 'spork'
+  gem 'capybara'
+  gem 'rb-inotify'
+  gem 'libnotify'
 end
 
 gem 'jquery-rails'
