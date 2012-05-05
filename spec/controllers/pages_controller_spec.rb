@@ -20,6 +20,10 @@ describe PagesController do
       get 'home'
       response.should have_selector('a', href: '/', content: 'Home')
     end
+    it 'contains categories tree' do
+      get 'home'
+      response.should have_selector('div#tree')
+    end
   end
 
 end

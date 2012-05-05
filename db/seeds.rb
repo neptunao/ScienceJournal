@@ -5,3 +5,10 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+root = Category.create(title: 'root')
+child1 = Category.create(title: 'child1')
+top1 = Category.create(title: 'top1')
+top2 = Category.create(title: 'top2')
+top1.children = [child1]
+root.children = [top1, top2]

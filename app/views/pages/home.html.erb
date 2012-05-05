@@ -1,5 +1,9 @@
-<html>
-    <body>
-        <p>Find me in app/views/pages/home.html.erb</p>
-    </body>
-</html>
+<%= javascript_include_tag 'jquery-ui.js' %>
+<%= javascript_include_tag "jquery.dynatree.js" %>
+<script type="text/javascript">
+    $(function(){
+        $("#tree").dynatree(<%= ActiveSupport::JSON.encode(Category.first.as_json).html_safe %>);
+    });
+</script>
+<p>Find me in app/views/pages/home.html.erb</p>
+<div class="nav pull-left" id="tree"> </div>

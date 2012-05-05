@@ -23,6 +23,7 @@ end
 group :development do
   gem 'rspec-rails'
   gem 'guard-rspec'
+  gem 'guard-spork'
 end
 
 group :test do
