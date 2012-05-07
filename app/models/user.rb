@@ -8,4 +8,8 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me
   # attr_accessible :title, :body
   has_and_belongs_to_many :roles
+
+  def role?(role)
+    self.roles.where(name: role.to_s.camelcase)
+  end
 end
