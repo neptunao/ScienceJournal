@@ -7,7 +7,7 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 admin_role = Role.create(name: :admin)
-admin = User.create!(email: 'duxcomus@mail.ru', password: 'adminadmin', password_confirmation: 'adminadmin', remember_me: false)
+admin = User.create!(name: 'admin', email: 'duxcomus@mail.ru', password: 'adminadmin', password_confirmation: 'adminadmin', remember_me: false)
 admin.roles = [admin_role]
 root = Category.create(title: 'root')
 child1 = Category.create(title: 'child1')

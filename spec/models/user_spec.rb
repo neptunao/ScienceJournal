@@ -11,4 +11,14 @@ describe User do
   it 'admin can manage all' do
     Ability.new(@admin_user).can?(:manage, :all).should be_true
   end
+  it 'name should exists' do
+    user = FactoryGirl.create(:user)
+    user.name = ''
+    user.should_not be_valid
+  end
+  it 'name should be unique' do
+    exist_user = FactoryGirl.create(:user)
+    user = User.new(name: exist_user.name, password: exist_user.password, email: exist_user.email + 'a')
+    user.should_not be_valid
+  end
 end
