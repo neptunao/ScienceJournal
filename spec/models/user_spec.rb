@@ -21,4 +21,9 @@ describe User do
     user = User.new(name: exist_user.name, password: exist_user.password, email: exist_user.email + 'a')
     user.should_not be_valid
   end
+  it 'type should exists' do
+    user = FactoryGirl.create(:user)
+    user.user_type = ''
+    user.should_not be_valid
+  end
 end

@@ -27,8 +27,12 @@ describe 'Autorization' do
     visit edit_user_registration_path(@user)
     response.should have_selector 'input', name: 'user[name]'
   end
-  it 'register page name field' do
+  it 'register page contains name field' do
     visit new_user_registration_path
     response.should have_selector 'input', name: 'user[name]'
+  end
+  it 'register page contains type field' do
+    visit new_user_registration_path
+    response.should have_selector 'select', name: 'user[user_type]'
   end
 end
