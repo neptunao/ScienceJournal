@@ -26,4 +26,12 @@ describe User do
     user.user_type = ''
     user.should_not be_valid
   end
+  it 'autor should be approved by default' do
+    user = User.new(user_type: 'Autor')
+    user.should be_is_approved
+  end
+  it 'censor should not be approved by default' do
+    user = User.new(user_type: 'Censor')
+    user.should_not be_is_approved
+  end
 end

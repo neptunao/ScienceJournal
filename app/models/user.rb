@@ -5,11 +5,16 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :user_type, :email, :password, :password_confirmation, :remember_me
+  attr_accessible :name, :user_type, :email, :password, :password_confirmation, :remember_me, :is_approved
   validates :name, presence: true, uniqueness: true
   validates :user_type, presence: true
   # attr_accessible :title, :body
   has_and_belongs_to_many :roles
+
+  def initialize(*args)
+    super
+    self.is_approved = self.user_type == "Autor"
+  end
 
   def role?(role)
     self.roles.where(name: role.to_s.camelcase)
