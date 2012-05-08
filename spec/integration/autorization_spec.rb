@@ -33,6 +33,6 @@ describe 'Autorization' do
   end
   it 'register page contains type field' do
     visit new_user_registration_path
-    response.should have_selector 'select', name: 'user[user_type]'
+    response.should have_selector 'select', name: 'user[user_roles]'
   end
 end

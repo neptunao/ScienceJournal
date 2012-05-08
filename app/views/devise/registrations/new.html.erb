@@ -15,8 +15,8 @@
   <div><%= f.label :password_confirmation %><br />
   <%= f.password_field :password_confirmation %></div>
 
-  <div><%= f.label :user_type %><br />
-  <%= f.select :user_type, %w(Autor Censor) %></div>
+  <div><%= f.label :user_roles %><br />
+  <%= f.select :user_roles, %w(Autor Censor) %></div>
 
   <div><%= f.submit "Sign up" %></div>
 <% end %>
