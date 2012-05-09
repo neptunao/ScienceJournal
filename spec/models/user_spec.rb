@@ -6,8 +6,8 @@ describe User do
     @admin_user = User.first!
   end
   it 'admin should exist' do
-    @admin_user.user_roles.first.should_not be_nil
-    @admin_user.user_roles.first.name.should eql 'admin'
+    @admin_user.roles.first.should_not be_nil
+    @admin_user.roles.first.name.should eql 'admin'
   end
   it 'admin can manage all' do
     Ability.new(@admin_user).can?(:manage, :all).should be_true
@@ -28,7 +28,8 @@ describe User do
   end
   it 'censor should not be approved by default' do
     user = FactoryGirl.create(:user)
-    user.user_roles = [Role.new(name: 'Censor')]
+    user.roles = [Role.new(name: 'Censor')]
+    user.save
     user.should_not be_is_approved
   end
   it 'should have user role by default' do

@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :is_approved, :user_roles, :role_ids
+  attr_accessible :name, :email, :password, :password_confirmation, :remember_me, :is_approved, :role_ids
   validates :name, presence: true, uniqueness: true
   # attr_accessible :title, :body
   has_and_belongs_to_many :roles
@@ -13,7 +13,7 @@ class User < ActiveRecord::Base
 
   def initialize(*attr)
     super
-    self.user_roles = [Role.guest_role] if user_roles.empty?
+    self.roles = [Role.guest_role] if roles.empty?
   end
 
   def update_approved
@@ -21,16 +21,7 @@ class User < ActiveRecord::Base
     true
   end
 
-  def user_roles=(value)
-    self.roles = value
-    update_approved
-  end
-
-  def user_roles
-    self.roles
-  end
-
   def role?(role)
-    user_roles.any?{|r| r.name.to_s.downcase == role.to_s.downcase}
+    roles.any?{|r| r.name.to_s.downcase == role.to_s.downcase}
   end
 end

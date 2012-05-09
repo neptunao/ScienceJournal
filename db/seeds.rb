@@ -16,7 +16,7 @@ Role.create(name: :admin)
 
 admin = User.create!(name: 'admin', email: 'duxcomus@mail.ru', password: 'adminadmin',
                      password_confirmation: 'adminadmin')
-admin.user_roles = [Role.admin_role]
+admin.roles = [Role.admin_role]
 
 #Categories
 root = Category.create(title: 'root')

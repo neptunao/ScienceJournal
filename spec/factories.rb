@@ -10,13 +10,13 @@ FactoryGirl.define do
     user.email    "michael@example.com"
     user.password "foobar"
     user.password_confirmation "foobar"
-    user.user_roles { |role| [role.association(:author_role), role.association(:guest_role)] }
+    user.roles { |role| [role.association(:author_role), role.association(:guest_role)] }
   end
   factory :guest_user, class: 'User' do |user|
     user.name     "Guest"
     user.email    "guest@example.com"
     user.password "foobar"
     user.password_confirmation "foobar"
-    user.user_roles { |role| [role.association(:guest_role)] }
+    user.roles { |role| [role.association(:guest_role)] }
   end
 end
