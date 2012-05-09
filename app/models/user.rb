@@ -10,9 +10,14 @@ class User < ActiveRecord::Base
   # attr_accessible :title, :body
   has_and_belongs_to_many :roles
 
+  def initialize(*attr)
+    super
+    self.user_roles = [Role.guest_role] if user_roles.empty?
+  end
+
   def user_roles=(value)
     self.roles = value
-    self.is_approved = role? 'autor'
+    self.is_approved = role? 'author'
   end
 
   def user_roles

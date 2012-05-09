@@ -2,6 +2,9 @@ require 'spec_helper'
 include Devise::TestHelpers
 
 describe 'Autorization' do
+  before :each do
+    load "#{Rails.root}/db/seeds.rb"
+  end
   def login
     @user = FactoryGirl.create(:user)
     visit '/login'
@@ -33,6 +36,8 @@ describe 'Autorization' do
   end
   it 'register page contains type field' do
     visit new_user_registration_path
-    response.should have_selector 'select', name: 'user[user_roles]'
+    assert_tag tag: 'select', attributes: { name: 'user[user_roles]' }, children: { count: 2 }
+    response.should have_selector 'select option', value: Role.author_role.id.to_s
+    response.should have_selector 'select option', value: Role.censor_role.id.to_s
   end
 end

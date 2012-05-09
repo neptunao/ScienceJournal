@@ -22,14 +22,17 @@ describe User do
     user = User.new(name: exist_user.name, password: exist_user.password, email: exist_user.email + 'a')
     user.should_not be_valid
   end
-  it 'autor should be approved by default' do
+  it 'author should be approved by default' do
     user = FactoryGirl.create(:user)
     user.should be_is_approved
   end
   it 'censor should not be approved by default' do
     user = FactoryGirl.create(:user)
     user.user_roles = [Role.new(name: 'Censor')]
-    user.save
     user.should_not be_is_approved
+  end
+  it 'should have user role by default' do
+    user = User.new
+    user.roles.should =~ [Role.guest_role]
   end
 end
