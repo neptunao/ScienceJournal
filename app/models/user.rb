@@ -9,15 +9,21 @@ class User < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   # attr_accessible :title, :body
   has_and_belongs_to_many :roles
+  before_save :update_approved
 
   def initialize(*attr)
     super
     self.user_roles = [Role.guest_role] if user_roles.empty?
   end
 
+  def update_approved
+    self.is_approved = role? 'author'
+    true
+  end
+
   def user_roles=(value)
     self.roles = value
-    self.is_approved = role? 'author'
+    update_approved
   end
 
   def user_roles
