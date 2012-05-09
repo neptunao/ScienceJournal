@@ -36,7 +36,7 @@ describe 'Autorization' do
   end
   it 'register page contains type field' do
     visit new_user_registration_path
-    assert_tag tag: 'select', attributes: { name: 'user[user_roles]' }, children: { count: 2 }
+    assert_tag tag: 'select', attributes: { name: 'user[role_ids]' }, children: { count: 2 }
     response.should have_selector 'select option', value: Role.author_role.id.to_s
     response.should have_selector 'select option', value: Role.censor_role.id.to_s
   end

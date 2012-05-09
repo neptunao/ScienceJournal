@@ -15,9 +15,8 @@
   <div><%= f.label :password_confirmation %><br />
   <%= f.password_field :password_confirmation %></div>
 
-  <div><%= f.label :user_roles %><br />
-  <% roles = Role.all.select {|role| role.name.to_s.downcase == 'author' || role.name.to_s.downcase == 'censor' } %>
-  <%= f.select :user_roles, options_from_collection_for_select(roles, "id", "name") %></div>
+  <div><%= f.label :role_ids %><br />
+  <%= f.select :role_ids, options_from_collection_for_select([Role.author_role, Role.censor_role], "id", "name") %></div>
 
   <div><%= f.submit "Sign up" %></div>
 <% end %>
