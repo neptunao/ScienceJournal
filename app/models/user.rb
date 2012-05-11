@@ -9,19 +9,22 @@ class User < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   # attr_accessible :title, :body
   has_and_belongs_to_many :roles
-  before_save :update_approved
+  before_create :post_init
 
   def initialize(*attr)
     super
     self.roles = [Role.guest_role] if roles.empty?
   end
 
-  def update_approved
-    self.is_approved = role? 'author'
-    true
-  end
-
   def role?(role)
     roles.any?{|r| r.name.to_s.downcase == role.to_s.downcase}
   end
+
+  private
+
+  def post_init
+    self.is_approved = !role?('censor')
+    true
+  end
+
 end

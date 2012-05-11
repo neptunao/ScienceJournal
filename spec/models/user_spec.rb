@@ -26,10 +26,11 @@ describe User do
     user = FactoryGirl.create(:user)
     user.should be_is_approved
   end
+  it 'admin should be approved by default' do
+    @admin_user.should be_is_approved
+  end
   it 'censor should not be approved by default' do
-    user = FactoryGirl.create(:user)
-    user.roles = [Role.new(name: 'Censor')]
-    user.save
+    user = FactoryGirl.create(:censor_user)
     user.should_not be_is_approved
   end
   it 'should have user role by default' do

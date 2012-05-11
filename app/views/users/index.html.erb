@@ -1,0 +1,9 @@
+<ul>
+    <%= form_tag update_without_password_path, method: :put do %>
+      <% @users.each do |user| %>
+        <%= link_to user.name, edit_user_registration_path(user) %>
+        <%= check_box_tag "approved[#{user.id}]" %>
+      <% end %>
+    <%= submit_tag 'Save' %>
+  <% end %>
+</ul>

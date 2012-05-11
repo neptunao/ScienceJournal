@@ -7,6 +7,9 @@ ScienceJournal::Application.routes.draw do
     get "/register" => "devise/registrations#new"
     get "/logout" => "devise/sessions#destroy"
   end
+  match 'cabinet' => 'pages#cabinet'
+  match '/users' => 'users#index', as: :all_users, via: :get
+  match '/update_users' => 'users#update_without_password', as: :update_without_password, via: :put
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
