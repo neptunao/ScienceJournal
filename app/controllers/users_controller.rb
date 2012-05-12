@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_filter :authenticate_user!, only: [:update_without_password] #TODO integration tests
+  before_filter :authenticate_user!, only: [:update_without_password]
   def index
     @users = User.where(is_approved: params[:approved])
     authorize! :read, @users
