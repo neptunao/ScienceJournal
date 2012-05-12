@@ -1,14 +1,18 @@
-<ul>
-    <%= form_tag update_without_password_path, method: :put do %>
-      <% @users.each do |user| %>
-          <li class="one_line_item">
-            <%= label_tag 'email', 'email: ' %>
-            <%= label_tag "email[#{user.id}]", user.email  %>
-            <%= label_tag 'name', 'name: ' %>
-            <%= link_to user.name, edit_user_registration_path(user) %>
-            <%= check_box_tag "approved[#{user.id}]" %>
-          </li>
+<% unless @users.empty? %>
+    <ul>
+        <%= form_tag update_without_password_path, method: :put do %>
+          <% @users.each do |user| %>
+              <li class="one_line_item">
+                <%= label_tag 'email', 'email: ' %>
+                <%= label_tag "email[#{user.id}]", user.email  %>
+                <%= label_tag 'name', 'name: ' %>
+                <%= link_to user.name, edit_user_registration_path(user) %>
+                <%= check_box_tag "approved[#{user.id}]" %>
+              </li>
+          <% end %>
+        <%= submit_tag 'Save' %>
       <% end %>
-    <%= submit_tag 'Save' %>
-  <% end %>
-</ul>
+    </ul>
+<% else %>
+    <p>All users are approved.</p>
+<% end %>

@@ -45,4 +45,10 @@ describe 'Admin' do
     @user2.should be_is_approved
     @user3.should be_is_approved
   end
+  it 'show message when all user approved' do
+    User.where(is_approved: false).each { |user| user.update_attribute(:is_approved, true) }
+    visit '/users?approved=false'
+    response.should_not have_selector 'input', type: 'submit'
+    response.should have_selector 'p'
+  end
 end
