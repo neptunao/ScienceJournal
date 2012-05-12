@@ -12,16 +12,6 @@ describe UsersController do
   after :all do
     User.delete_all
   end
-  it 'does not allow update_without_password to guest' do
-    lambda { put 'update_without_password', approved: [] }.should raise_error CanCan::AccessDenied #TODO integration test
-  end
-  it 'throw exception when non admin user request update_without_password action' do
-    @users.each do |user|
-      sign_in user
-      lambda { put 'update_without_password', approved: [] }.should raise_error CanCan::AccessDenied
-      sign_out user
-    end
-  end
   it 'throw exception when non admin user request index action' do
     @users.each do |user|
       sign_in user

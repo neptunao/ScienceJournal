@@ -5,8 +5,12 @@ class UsersController < ApplicationController
     authorize! :read, @users
   end
   def update_without_password
-    authorize! :update_without_password, :all
-    params[:approved].each {|p| User.find(p[0]).update_attribute(:is_approved, p[1]) }
-    redirect_to root_url
+    begin
+      authorize! :update_without_password, :all
+      params[:approved].each {|p| User.find(p[0]).update_attribute(:is_approved, p[1]) }
+      redirect_to root_url
+    rescue CanCan::AccessDenied
+      redirect_to root_url
+    end
   end
 end
