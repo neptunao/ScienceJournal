@@ -9,9 +9,6 @@ describe User do
     @admin_user.roles.first.should_not be_nil
     @admin_user.roles.first.name.should eql 'admin'
   end
-  it 'admin can manage all' do
-    Ability.new(@admin_user).can?(:manage, :all).should be_true
-  end
   it 'name should exists' do
     user = FactoryGirl.create(:user)
     user.name = ''

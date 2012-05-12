@@ -8,6 +8,9 @@ FactoryGirl.define do
   factory :censor_role, class: 'Role' do
     name :censor
   end
+  factory :admin_role, class: 'Role' do
+    name :admin
+  end
   factory :user do |user|
     user.name     "Michael Hartl"
     user.email    "michael@example.com"
@@ -30,6 +33,14 @@ FactoryGirl.define do
     user.password "foobar"
     user.password_confirmation "foobar"
     user.roles { |role| [role.association(:censor_role)] }
+    user.after_create { |u| u.send :post_init }
+  end
+  factory :admin_user, class: 'User' do |user|
+    user.name     "test_admin"
+    user.email    "testadmin@example.com"
+    user.password "foobar"
+    user.password_confirmation "foobar"
+    user.roles { |role| [role.association(:admin_role)] }
     user.after_create { |u| u.send :post_init }
   end
 end

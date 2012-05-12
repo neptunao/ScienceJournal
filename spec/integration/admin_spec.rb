@@ -9,15 +9,16 @@ describe 'Admin' do
     @user2 = FactoryGirl.create(:censor_user, name: @user1.name + '1', email: @user1.email + 'a')
     @user3 = FactoryGirl.create(:censor_user, name: @user1.name + '2', email: @user1.email + 'b')
     @users = [@user1, @user2, @user3]
+    @admin = FactoryGirl.create(:admin_user)
   end
   before :each do
-    admin = User.first
     visit '/login'
-    fill_in 'Email', with: admin.email
-    fill_in 'Password', with: admin.password
+    fill_in 'Email', with: @admin.email
+    fill_in 'Password', with: @admin.password
     click_button 'Sign in'
   end
   after :all do
+    visit logout_path
     User.delete_all
   end
   it 'cabinet page contains pending registrations link' do
