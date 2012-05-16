@@ -43,4 +43,7 @@ FactoryGirl.define do
     user.roles { |role| [Role.admin_role ||role.association(:admin_role)] }
     user.after(:create) { |u| u.send :post_init }
   end
+  factory :data_file do |file|
+    file.sequence(:filename)
+  end
 end

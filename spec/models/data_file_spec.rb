@@ -3,7 +3,8 @@ include ActionDispatch::TestProcess
 
 describe DataFile do
   before :all do
-    @filename = "#{Rails.root}/public/data/test_upload.txt"
+    @short_filename = 'public/data/test_upload.txt'
+    @filename = "#{Rails.root}/#@short_filename"
   end
   after :all do
     DataFile.delete_all
@@ -28,5 +29,11 @@ describe DataFile do
     ensure
       File.exist?("#{Rails.root}/public/data/invalid.txt").should be_false
     end
+  end
+  it 'upload create new DataFile record' do
+    data_file = DataFile.upload(fixture_file_upload("/test_data/test_upload.txt"))
+    data_file.should be_a DataFile
+    data_file.filename.should be_eql @short_filename
+    DataFile.find(data_file.id).should_not be nil
   end
 end
