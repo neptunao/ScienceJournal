@@ -1,5 +1,6 @@
 ScienceJournal::Application.routes.draw do
   root :to => 'pages#home'
+  resources :authors
 
   devise_for :users
   devise_scope :user do

@@ -1,4 +1,4 @@
-<% unless @users.empty? %>
+<% if @users.any? %>
     <ul>
         <%= form_tag update_without_password_path, method: :put do %>
           <% @users.each do |user| %>
