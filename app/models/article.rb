@@ -2,7 +2,7 @@ class Article < ActiveRecord::Base
   attr_accessible :status, :title
   has_many :data_files
   validates :title, :status, presence: true
-  validates :data_files, :length => { is: 4 }
+  validates :data_files, :length => { in: 2..3 }
   after_save :after_save_action
 
   def after_save_action

@@ -14,24 +14,28 @@ describe Article do
   it 'status should be 0 by default' do
     Article.new(title: 'test').status.should be 0
   end
-  it 'datafiles num should be only 4' do
+  it 'datafiles num should be 2..4' do
     article = Article.new(title: 'test')
     article.data_files = []
     article.should_not be_valid
     article.data_files = fill_with_data_files(5)
     article.should_not be_valid
-    article.data_files = fill_with_data_files(4)
-    article.should be_valid
+    article.data_files = fill_with_data_files(1)
+    article.should_not be_valid
+    (2..3).each_with_index do |i|
+      article.data_files = fill_with_data_files(i)
+      article.should be_valid
+    end
   end
   it 'destroy old data_files before save' do
     DataFile.delete_all
     article = Article.new(title: 'test')
     article.data_files = fill_with_data_files(1)
-    article.data_files = fill_with_data_files(4)
-    article.data_files.count.should be 5
-    article.save
+    article.data_files = fill_with_data_files(3)
     article.data_files.count.should be 4
-    DataFile.count.should be 4
+    article.save
+    article.data_files.count.should be 3
+    DataFile.count.should be 3
   end
   def fill_with_data_files(times_count)
     data_files = []
