@@ -18,11 +18,11 @@ describe Article do
     article = Article.new(title: 'test')
     article.data_files = []
     article.should_not be_valid
-    article.data_files = fill_with_data_files(5)
+    article.data_files = fill_with_data_files(6)
     article.should_not be_valid
-    article.data_files = fill_with_data_files(1)
+    article.data_files = fill_with_data_files(3)
     article.should_not be_valid
-    (2..3).each_with_index do |i|
+    (4..5).each_with_index do |i|
       article.data_files = fill_with_data_files(i)
       article.should be_valid
     end
@@ -31,11 +31,11 @@ describe Article do
     DataFile.delete_all
     article = Article.new(title: 'test')
     article.data_files = fill_with_data_files(1)
-    article.data_files = fill_with_data_files(3)
-    article.data_files.count.should be 4
+    article.data_files = fill_with_data_files(5)
+    article.data_files.count.should be 6
     article.save
-    article.data_files.count.should be 3
-    DataFile.count.should be 3
+    article.data_files.count.should be 5
+    DataFile.count.should be 5
   end
   def fill_with_data_files(times_count)
     data_files = []
