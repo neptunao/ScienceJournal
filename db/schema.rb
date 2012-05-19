@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120519110941) do
+ActiveRecord::Schema.define(:version => 20120519163742) do
 
   create_table "articles", :force => true do |t|
     t.string   "title"
@@ -37,6 +37,16 @@ ActiveRecord::Schema.define(:version => 20120519110941) do
   end
 
   add_index "categories", ["parent_id"], :name => "index_categories_on_parent_id"
+
+  create_table "censors", :force => true do |t|
+    t.string   "first_name",  :null => false
+    t.string   "middle_name"
+    t.string   "last_name",   :null => false
+    t.string   "degree",      :null => false
+    t.string   "post",        :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
 
   create_table "data_files", :force => true do |t|
     t.string   "filename"

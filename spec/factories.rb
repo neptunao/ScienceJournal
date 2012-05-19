@@ -51,4 +51,11 @@ FactoryGirl.define do
     author.middle_name 'middle_name'
     author.sequence(:last_name) { |n| "last_name_#{n}"}
   end
+  factory :censor do |censor|
+    censor.sequence(:first_name) { |n| "first_name_#{n}"}
+    censor.middle_name 'middle_name'
+    censor.sequence(:last_name) { |n| "last_name_#{n}"}
+    censor.sequence(:degree) { |n| "degree#{n}" }
+    censor.sequence(:post) { |n| "post#{n}" }
+  end
 end
