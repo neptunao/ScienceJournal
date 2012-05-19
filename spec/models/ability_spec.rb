@@ -26,7 +26,7 @@ describe 'Abilities of' do
   end
 
   before :each do
-    @author_user.author = nil
+    @author_user.person = nil
   end
 
   it 'admin can manage all' do
@@ -46,7 +46,7 @@ describe 'Abilities of' do
   end
 
   it 'author user only without author association can get access to authors/new' do
-    @author_user.author = FactoryGirl.create(:author)
+    @author_user.person = FactoryGirl.create(:author)
     author_user_ability.should_not be_can(:new, Author)
   end
 
@@ -57,7 +57,7 @@ describe 'Abilities of' do
   end
 
   it 'author user only without author association can get access to authors/create' do
-    @author_user.author = FactoryGirl.create(:author)
+    @author_user.person = FactoryGirl.create(:author)
     author_user_ability.should_not be_can(:create, Author)
   end
 end

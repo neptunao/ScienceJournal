@@ -7,7 +7,7 @@ class Ability
       can :manage, :all
     end
     if user.role? :author
-      unless user.author
+      unless user.person
         can :new, Author
         can :create, Author
       end
