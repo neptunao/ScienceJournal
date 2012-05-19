@@ -12,8 +12,8 @@ FactoryGirl.define do
     name :admin
   end
   factory :user do |user|
-    user.name     "Michael Hartl"
-    user.email    "michael@example.com"
+    user.sequence(:name) { |n| "author_user_#{n}" }
+    user.sequence(:email) { |n| "michael#{n}@example.com"  }
     user.password "foobar"
     user.password_confirmation "foobar"
     user.roles { |role| [Role.author_role || role.association(:author_role), Role.guest_role || role.association(:guest_role)] }
@@ -45,5 +45,10 @@ FactoryGirl.define do
   end
   factory :data_file do |file|
     file.sequence(:filename)
+  end
+  factory :author do |author|
+    author.sequence(:first_name) { |n| "first_name_#{n}"}
+    author.middle_name 'middle_name'
+    author.sequence(:last_name) { |n| "last_name_#{n}"}
   end
 end

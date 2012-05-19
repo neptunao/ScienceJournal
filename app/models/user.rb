@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   validates :name, presence: true, uniqueness: true
   # attr_accessible :title, :body
   has_and_belongs_to_many :roles
+  has_one :author
   before_create :post_init
 
   def initialize(*attr)

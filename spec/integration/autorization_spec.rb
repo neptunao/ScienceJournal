@@ -8,8 +8,8 @@ describe 'Autorization' do
   def login
     @user = FactoryGirl.create(:user)
     visit '/login'
-    fill_in 'Email', with: 'michael@example.com'
-    fill_in 'Password', with: 'foobar'
+    fill_in 'Email', with: @user.email
+    fill_in 'Password', with: @user.password
     click_button 'Sign in'
   end
   it 'change sign in link to sign out' do
