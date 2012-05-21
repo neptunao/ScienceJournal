@@ -12,6 +12,8 @@ ScienceJournal::Application.routes.draw do
   match 'cabinet' => 'pages#cabinet'
   match '/users' => 'users#index', as: :all_users, via: :get
   match '/update_users' => 'users#update_without_password', as: :update_without_password, via: :put
+  match '/profile/show' => 'profile#show', as: :show_profile, via: :get
+  match '/profile/edit_personal' => 'profile#edit_personal_info', as: :edit_personal, via: :get
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -17,11 +17,15 @@ describe 'Autorization' do
     response.should_not have_selector 'a', href: '/login', content: 'Sign in'
     response.should_not have_selector 'a', href: '/register', content: 'Sign up'
     response.should have_selector 'a', href: '/logout', content: 'Sign out'
+    response.should have_selector 'a', href: '/profile/show'
+    response.should have_selector 'a', href: '/profile/edit_personal'
   end
   it 'change sign out link to sign in' do
     login
     visit '/logout'
     response.should_not have_selector 'a', href: '/logout', content: 'Sign out'
+    response.should_not have_selector 'a', href: '/profile/show'
+    response.should_not have_selector 'a', href: '/profile/edit_personal'
     response.should have_selector 'a', href: '/login', content: 'Sign in'
     response.should have_selector 'a', href: '/register', content: 'Sign up'
   end

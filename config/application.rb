@@ -55,5 +55,11 @@ module ScienceJournal
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    devise_layout = proc { |controller| user_signed_in? ? "layouts/profile" : "application" }
+    config.to_prepare do
+      Devise::PasswordsController.layout devise_layout
+      Devise::RegistrationsController.layout devise_layout
+    end
   end
 end

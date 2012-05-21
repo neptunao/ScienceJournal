@@ -18,4 +18,17 @@ describe 'Layout' do
       response.should have_selector 'li', content: m
     end
   end
+
+  it 'of profile contains links' do
+    visit show_profile_path
+    response.should render_template 'layouts/application'
+    response.should have_selector 'a', href: show_profile_path
+    response.should have_selector 'a', href: edit_personal_path
+    response.should have_selector 'a', href: edit_user_registration_path(@user)
+    response.should have_selector 'a', href: edit_user_password_path(@user)
+  end
+
+  it 'of Devise render profile layout' do
+    pending 'not work because Devise'
+  end
 end
