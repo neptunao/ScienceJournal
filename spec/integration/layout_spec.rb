@@ -20,6 +20,7 @@ describe 'Layout' do
   end
 
   it 'of profile contains links' do
+    login
     visit show_profile_path
     response.should render_template 'layouts/application'
     response.should have_selector 'a', href: show_profile_path
