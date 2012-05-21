@@ -16,5 +16,6 @@ describe 'authors/new' do
   it 'render errors partial' do
     render
     rendered.should render_template('shared/_errors_explanation')
+    rendered.should render_template('shared/_person')
   end
 end

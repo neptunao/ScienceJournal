@@ -1,18 +1,7 @@
 <h1>New author</h1>
 <%= form_for @author do |f| %>
     <%= render 'shared/errors_explanation', object: f.object %>
-    <div>
-      <%= f.label :first_name %> <br />
-      <%= f.text_field :first_name %>
-    </div>
-    <div>
-      <%= f.label :middle_name %> <br />
-      <%= f.text_field :middle_name %>
-    </div>
-    <div>
-      <%= f.label :last_name %> <br />
-      <%= f.text_field :last_name %>
-    </div>
+    <%= render 'shared/person', form: f %>
     <div>
       <%= f.submit %>
     </div>

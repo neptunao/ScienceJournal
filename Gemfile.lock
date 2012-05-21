@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/ryanb/nested_form.git
+  revision: 38c7ef348f0e1b70cd4ca7d9e14548aef3dea607
+  specs:
+    nested_form (0.2.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -185,6 +191,7 @@ DEPENDENCIES
   guard-spork
   jquery-rails
   libnotify
+  nested_form!
   pg
   rails (= 3.2.3)
   rb-inotify

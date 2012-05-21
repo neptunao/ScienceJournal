@@ -7,7 +7,7 @@ describe DataFile do
     @filename = "#{Rails.root}/#@short_filename"
   end
   after :all do
-    DataFile.delete_all
+    DataFile.destroy_all
     File.delete(@filename)
   end
   it 'filename should exists' do

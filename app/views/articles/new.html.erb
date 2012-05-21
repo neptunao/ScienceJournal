@@ -1,0 +1,59 @@
+<h1>New article</h1>
+<%= nested_form_for @article do |f| %>
+    <%= render 'shared/errors_explanation', object: f.object %>
+    <div>
+      <%= f.label :title %> <br/>
+      <%= f.text_field :title %>
+    </div>
+    <div>
+      <%= f.fields_for :authors do |f_a| %>
+          <div>
+            <%= render 'shared/person', form: f_a, div_class: 'inline' %>
+            <br />
+            <%= f_a.link_to_remove 'Remove' %>
+            <br class="clearBoth" />
+          </div>
+      <% end %>
+      <%= f.link_to_add 'Add', :authors %>
+    </div>
+    <div>
+      <%= f.label :article %> <br/>
+      <%= f.file_field :article %> <br/>
+    </div>
+    <div>
+      <%= f.label :resume_rus %> <br/>
+      <%= f.file_field :resume_rus %>
+    </div>
+    <div>
+      <%= f.label :resume_eng %> <br/>
+      <%= f.file_field :resume_eng %>
+    </div>
+    <div>
+      <%= f.label :cover_note %> <br/>
+      <%= f.file_field :cover_note %>
+    </div>
+    <div>
+      <%= check_box_tag 'has_review', '1', false, { onclick: 'changeVisibilityByCheckbox(has_review, "review_div")' } %> <br />
+    </div>
+    <div class="hidden_tag" id='review_div'>
+        <div>
+          <%= f.label :review %> <br/>
+          <%= f.file_field :review %> <br />
+          <%= f.fields_for :censor do |censor_form| %>
+            <%= render 'shared/person', form: censor_form, div_class: 'inline' %>
+            <br class="clearBoth" />
+            <div>
+                <%= censor_form.label :degree %> <br />
+                <%= censor_form.text_field :degree %>
+            </div>
+            <div>
+                <%= censor_form.label :post %> <br />
+                <%= censor_form.text_field :post %>
+            </div>
+          <% end %>
+        </div>
+    </div>
+    <div>
+      <%= f.submit %>
+    </div>
+<% end %>

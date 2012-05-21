@@ -39,6 +39,7 @@ end
 gem 'jquery-rails'
 gem 'cancan'
 gem 'devise'
+gem 'nested_form', :git => 'https://github.com/ryanb/nested_form.git'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
