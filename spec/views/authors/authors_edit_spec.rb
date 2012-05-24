@@ -1,12 +1,7 @@
 require 'spec_helper'
 
-describe 'authors/new' do
-  before :all do
-    User.destroy_all
-    load "#{Rails.root}/db/seeds.rb"
-  end
-
-  before :each do
+describe 'authors/edit' do
+  before(:each) do
     assign(:author, stub_model(Author, first_name: "Test", last_name: 'Test').as_new_record)
   end
 

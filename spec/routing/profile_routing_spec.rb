@@ -9,4 +9,7 @@ describe "Profile routing" do
   it 'routes to edit personal info' do
     { get: '/profile/edit_personal' }.should route_to controller: 'profile', action: 'edit_personal_info'
   end
+  it 'routes to update_personal_info' do
+    { put: '/profile/update' }.should route_to controller: 'profile', action: 'update'
+  end
 end

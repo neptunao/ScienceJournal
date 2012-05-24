@@ -27,6 +27,11 @@
       </div>
     </header>
      <div class="container-fluid">
+       <div>
+         <% flash.each do |key, value| %>
+           <%= content_tag :div, value, class: "alert alert-#{key}" %>
+         <% end %>
+       </div>
         <%= content_for?(:content) ? yield(:content) : yield %>
      </div>
 </body>

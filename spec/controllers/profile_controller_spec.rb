@@ -3,8 +3,10 @@ require 'spec_helper'
 describe ProfileController do
   before :all do
     User.destroy_all
+    load "#{Rails.root}/db/seeds.rb"
     @user = FactoryGirl.create(:user)
   end
+
   it 'show action should redirect when non-authorized' do
     get :show
     response.should redirect_to new_user_session_path
@@ -26,6 +28,32 @@ describe ProfileController do
     sign_in @user
     get :edit_personal_info
     response.should be_success
+    sign_out @user
+  end
+
+  it 'invalid update (create new person) not change person' do
+    sign_in @user
+    @user.person.should be_nil
+    put :update, { user: { person: { first_name: '123' } } }
+    @user.reload
+    @user.person.should be_nil
+    sign_out @user
+  end
+
+  it 'invalid update (existing person) not change person' do
+    sign_in @user
+    @user.update_attribute(:person, FactoryGirl.create(:author))
+    expected_id = @user.person.id
+    put :update, { user: { person: { first_name: '123' } } }
+    @user.reload
+    @user.person.id.should be expected_id
+    sign_out @user
+  end
+
+  it 'invalid update render edit' do
+    sign_in @user
+    put :update, { user: { person: { } } }
+    response.should render_template 'profile/edit_personal_info'
     sign_out @user
   end
 end
