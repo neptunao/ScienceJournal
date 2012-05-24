@@ -12,10 +12,19 @@ Role.create(name: :author)
 Role.create(name: :censor)
 Role.create(name: :admin)
 
+#Authors
+author1 = Author.create(first_name: 'first_name', middle_name: 'middle_name', last_name: 'last_name')
+Author.create(first_name: 'first_name1', middle_name: 'middle_name1', last_name: 'last_name1')
+
 #users
 
 User.create!(name: 'admin', email: 'duxcomus@mail.ru', password: 'adminadmin',
                      password_confirmation: 'adminadmin', role_ids: [Role.admin_role.id])
+
+author_user = User.create!(name: 'author', email: 'author1@mail.ru', password: '123456',
+                     password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.author_role.id])
+author_user.update_attribute(:person, author1)
+
 User.create!(name: 'censor', email: 'censor@mail.ru', password: '123456',
                      password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.censor_role.id])
 

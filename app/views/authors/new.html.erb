@@ -1,8 +1,2 @@
 <h1>New author</h1>
-<%= form_for @author do |f| %>
-    <%= render 'shared/errors_explanation', object: f.object %>
-    <%= render 'shared/person', form: f %>
-    <div>
-      <%= f.submit %>
-    </div>
-<% end %>
+<%= render 'form' %>

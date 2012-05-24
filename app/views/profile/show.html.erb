@@ -1,1 +1,6 @@
 <%= render 'users/user_show', user: current_user %>
+<% if current_user.person %>
+    <%= render 'authors/author_show', object: current_user.person %>
+<% else  %>
+    User has not personal info.
+<% end %>

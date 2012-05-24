@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe UsersController do
   before :all do
+    User.destroy_all
     load "#{Rails.root}/db/seeds.rb"
     @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.create(:censor_user)
@@ -13,10 +14,11 @@ describe UsersController do
     User.delete_all
   end
 
-  it 'throw exception when non admin user request index action' do
+  it 'redirect to root non admin user request index action' do
     @users.each do |user|
       sign_in user
-      lambda { get 'index', approved: [] }.should raise_error CanCan::AccessDenied
+      get 'index', approved: []
+      response.should redirect_to root_path
       sign_out user
     end
   end

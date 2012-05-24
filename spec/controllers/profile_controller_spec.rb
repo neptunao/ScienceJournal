@@ -3,6 +3,7 @@ require 'spec_helper'
 describe ProfileController do
   before :all do
     User.destroy_all
+    load "#{Rails.root}/db/seeds.rb"
     @user = FactoryGirl.create(:user)
   end
   it 'show action should redirect when non-authorized' do

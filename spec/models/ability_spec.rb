@@ -16,7 +16,7 @@ describe 'Abilities of' do
   before :all do
     load "#{Rails.root}/db/seeds.rb"
     @guest_user = FactoryGirl.build(:guest_user)
-    @author_user = FactoryGirl.build(:user)
+    @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.build(:censor_user)
   end
 
@@ -59,5 +59,20 @@ describe 'Abilities of' do
   it 'author user only without author association can get access to authors/create' do
     @author_user.person = FactoryGirl.create(:author)
     author_user_ability.should_not be_can(:create, Author)
+  end
+
+  it 'all can get access to authors/show' do
+    guest_user_ability.should be_can(:show, Author)
+    author_user_ability.should be_can(:show, Author)
+    censor_user_ability.should be_can(:show, Author)
+  end
+
+  it 'only current author can get access to athors/edit' do
+    guest_user_ability.should_not be_can(:update, Author)
+    author_user_ability.should_not be_can(:update, Author)
+    censor_user_ability.should_not be_can(:update, Author)
+
+    @author_user.person = FactoryGirl.create(:author)
+    author_user_ability.should be_can(:update, @author_user.person)
   end
 end
