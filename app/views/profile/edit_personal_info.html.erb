@@ -1,0 +1,10 @@
+<h1>Edit personal info: </h1>
+<%= form_for current_user, url: update_personal_path do |f| %>
+    <%= f.fields_for :person, f.object.person do |person_f| %>
+        <%= render 'shared/errors_explanation', object: person_f.object %>
+        <%= render 'shared/person', form: person_f %>
+    <% end %>
+    <div>
+      <%= f.submit %>
+    </div>
+<% end %>
