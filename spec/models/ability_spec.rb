@@ -75,4 +75,10 @@ describe 'Abilities of' do
     @author_user.person = FactoryGirl.create(:author)
     author_user_ability.should be_can(:update, @author_user.person)
   end
+
+  it 'only author can create new articles' do
+    guest_user_ability.should_not be_can(:create, Article)
+    author_user_ability.should be_can(:create, Article)
+    censor_user_ability.should_not be_can(:create, Article)
+  end
 end

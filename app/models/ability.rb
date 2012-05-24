@@ -12,6 +12,7 @@ class Ability
         can :create, Author
       end
       can :update, user.person
+      can :create, Article
     end
     # Define abilities for the passed in user here. For example:
     #
