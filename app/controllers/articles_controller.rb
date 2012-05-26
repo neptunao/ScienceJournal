@@ -1,4 +1,4 @@
-class@article.censor ArticlesController < ApplicationController
+class ArticlesController < ApplicationController
   before_filter :authenticate_user!
   before_filter :precreate_article, only: :create
   load_and_authorize_resource
