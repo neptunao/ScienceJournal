@@ -4,6 +4,7 @@ class Article < ActiveRecord::Base
   RESUME_ENG_FILE_TAG = 'resume_eng'
   COVER_NOTE_FILE_TAG = 'cover_note'
   REVIEW_FILE_TAG = 'review'
+  STATUS_CREATED = 0
 
   attr_accessible :status, :title, :data_files, :authors
   has_many :data_files

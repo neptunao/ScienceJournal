@@ -9,6 +9,11 @@ describe ArticlesController do
     @users = [@author_user, @censor_user]
     @admin_user = FactoryGirl.create(:admin_user)
     @author = FactoryGirl.create(:author)
+
+    @article_file = fixture_file_upload('/test_data/test_pdf_file.pdf')
+    @resume_rus_file = fixture_file_upload('/test_data/test_pdf_file1.pdf')
+    @resume_eng_file = fixture_file_upload('/test_data/test_pdf_file2.pdf')
+    @cover_note_file = fixture_file_upload('/test_data/test_pdf_file3.pdf')
   end
 
   after :all do
@@ -51,10 +56,6 @@ describe ArticlesController do
 
   describe '.create' do
     before :all do
-      @article_file = fixture_file_upload('/test_data/test_pdf_file.pdf')
-      @resume_rus_file = fixture_file_upload('/test_data/test_pdf_file1.pdf')
-      @resume_eng_file = fixture_file_upload('/test_data/test_pdf_file2.pdf')
-      @cover_note_file = fixture_file_upload('/test_data/test_pdf_file3.pdf')
       @min_params = { article: { title: 'test', data_files: {
           article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
                                  has_review: '0', censor_attributes: { first_name: '', last_name: '' }
@@ -112,6 +113,28 @@ describe ArticlesController do
       post :create, { article: { title: 'test', data_files: { article: @article_file } } }
       DataFile.all.should be_empty
       sign_out user
+    end
+  end
+
+  describe '.index' do
+    it 'redirect to root if not admin' do
+      @users.each do |user|
+        sign_in user
+        get :index
+        response.should redirect_to root_path
+        sign_out user
+      end
+    end
+
+    it 'assigns articles without review as @articles' do
+      sign_in @admin_user
+      Article.create(title: 'test',
+                     data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                     authors: [FactoryGirl.create(:author)])
+      get :index, { review: '0' }
+      assigns(:articles).should_not be_nil
+      assigns(:articles) =~ Article.find_all_by_status(Article::STATUS_CREATED)
+      sign_out @admin_user
     end
   end
 end

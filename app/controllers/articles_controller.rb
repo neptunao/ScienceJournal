@@ -3,6 +3,10 @@ class ArticlesController < ApplicationController
   before_filter :precreate_article, only: :create
   load_and_authorize_resource
 
+  def index
+    @articles = Article.find_all_by_status(Article::STATUS_CREATED)
+  end
+
   def new
     if current_user.person.nil?
       flash[:notice] = 'You must fill personal information before create new article.'

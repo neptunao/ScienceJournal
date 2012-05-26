@@ -43,9 +43,31 @@ FactoryGirl.define do
     user.roles { |role| [Role.admin_role ||role.association(:admin_role)] }
     user.after(:create) { |u| u.send :post_init }
   end
+
   factory :data_file, class: 'DataFile' do |file|
     file.sequence(:filename)
   end
+
+  factory :article_file, class: 'DataFile' do |file|
+    file.sequence(:filename) { |n| "article_file_#{n}" }
+    tag Article::ARTICLE_FILE_TAG
+  end
+
+  factory :resume_rus, class: 'DataFile' do |file|
+    file.sequence(:filename) { |n| "resume_rus_#{n}" }
+    tag Article::RESUME_RUS_FILE_TAG
+  end
+
+  factory :resume_eng, class: 'DataFile' do |file|
+    file.sequence(:filename) { |n| "resume_eng_#{n}" }
+    tag Article::RESUME_ENG_FILE_TAG
+  end
+
+  factory :cover_note, class: 'DataFile' do |file|
+    file.sequence(:filename) { |n| "cover_note_#{n}" }
+    tag Article::COVER_NOTE_FILE_TAG
+  end
+
   factory :author do |author|
     author.sequence(:first_name) { |n| "first_name_#{n}"}
     author.middle_name 'middle_name'

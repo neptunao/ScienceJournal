@@ -2,35 +2,46 @@ require 'spec_helper'
 include Devise::TestHelpers
 
 describe 'Autorization' do
-  before :each do
+  before :all do
+    User.destroy_all
     load "#{Rails.root}/db/seeds.rb"
-  end
-  def login
     @user = FactoryGirl.create(:user)
+    @admin = FactoryGirl.create(:admin_user)
+  end
+
+  def login(user)
     visit '/login'
-    fill_in 'Email', with: @user.email
-    fill_in 'Password', with: @user.password
+    fill_in 'Email', with: user.email
+    fill_in 'Password', with: user.password
     click_button 'Sign in'
   end
   it 'change sign in link to sign out' do
-    login
+    login @user
     response.should_not have_selector 'a', href: '/login', content: 'Sign in'
     response.should_not have_selector 'a', href: '/register', content: 'Sign up'
+    response.should_not have_selector 'a', href: articles_path(review: false)
     response.should have_selector 'a', href: '/logout', content: 'Sign out'
     response.should have_selector 'a', href: '/profile/show'
     response.should have_selector 'a', href: '/profile/edit_personal'
   end
   it 'change sign out link to sign in' do
-    login
+    login @user
     visit '/logout'
     response.should_not have_selector 'a', href: '/logout', content: 'Sign out'
     response.should_not have_selector 'a', href: '/profile/show'
     response.should_not have_selector 'a', href: '/profile/edit_personal'
+    response.should_not have_selector 'a', href: articles_path(review: false)
     response.should have_selector 'a', href: '/login', content: 'Sign in'
     response.should have_selector 'a', href: '/register', content: 'Sign up'
   end
+
+  it 'render admin links' do
+    login @admin
+    response.should have_selector 'a', href: articles_path(review: false)
+  end
+
   it 'edit profile page contains name field' do
-    login
+    login @user
     visit edit_user_registration_path(@user)
     response.should have_selector 'input', name: 'user[name]'
   end

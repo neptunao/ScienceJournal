@@ -2,9 +2,11 @@ require 'spec_helper'
 include Devise::TestHelpers
 
 describe "Registration" do
-  before :each do
+  before :all do
+    User.destroy_all
     load "#{Rails.root}/db/seeds.rb"
   end
+
   it 'should create new author' do
     visit new_user_registration_path
     fill_in 'Name', with: 'test_user'
@@ -18,6 +20,7 @@ describe "Registration" do
     user.roles =~ [Role.author_role, Role.guest_role]
     user.should be_is_approved
   end
+
   it 'should create new censor' do
     visit new_user_registration_path
     fill_in 'Name', with: 'test_censor'

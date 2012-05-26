@@ -1,0 +1,11 @@
+<ul class="nav nav-pills">
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+      Admin
+      <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+      <li><%= link_to 'Pending review articles', articles_path(review: false) %></li>
+    </ul>
+  </li>
+</ul>
