@@ -7,7 +7,7 @@ describe 'articles/new' do
   end
 
   before(:each) do
-    assign(:article, stub_model(Article, title: "Test", data_files: @files ).as_new_record)
+    assign(:article, stub_model(Article, title: "Test", data_files: @files, censor: Censor.new ).as_new_record)
     render
   end
 
@@ -18,10 +18,10 @@ describe 'articles/new' do
   it 'render input forms' do
     rendered.should have_selector 'form', action: articles_path, method: 'post'
     rendered.should have_selector 'input', name: 'article[title]'
-    rendered.should have_selector 'input', name: 'article[article]'
-    rendered.should have_selector 'input', name: 'article[resume_rus]'
-    rendered.should have_selector 'input', name: 'article[resume_eng]'
-    rendered.should have_selector 'input', name: 'article[cover_note]'
+    rendered.should have_selector 'input', name: 'article[data_files[article]]'
+    rendered.should have_selector 'input', name: 'article[data_files[resume_rus]]'
+    rendered.should have_selector 'input', name: 'article[data_files[resume_eng]]'
+    rendered.should have_selector 'input', name: 'article[data_files[cover_note]]'
     rendered.should have_selector 'input', name: 'commit', type: 'submit'
   end
 
@@ -34,10 +34,11 @@ describe 'articles/new' do
   end
 
   it 'should render review' do
+    rendered.should have_selector 'input', name: 'has_review', type: 'hidden', value: '0'
     rendered.should have_selector 'input', name: 'has_review'
     rendered.should have_selector 'input', name: 'article[review]'
-    rendered.should have_selector 'input', name: 'article[censor][degree]'
-    rendered.should have_selector 'input', name: 'article[censor][post]'
+    rendered.should have_selector 'input', name: 'article[censor_attributes][degree]'
+    rendered.should have_selector 'input', name: 'article[censor_attributes][post]'
   end
 
   it 'render partials' do

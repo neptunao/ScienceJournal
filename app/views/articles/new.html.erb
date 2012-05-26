@@ -2,7 +2,7 @@
 <%= nested_form_for @article do |f| %>
     <%= render 'shared/errors_explanation', object: f.object %>
     <div>
-      <%= f.label :title %> <br/>
+      <%= f.label :title %>
       <%= f.text_field :title %>
     </div>
     <div>
@@ -17,37 +17,38 @@
       <%= f.link_to_add 'Add', :authors %>
     </div>
     <div>
-      <%= f.label :article %> <br/>
-      <%= f.file_field :article %> <br/>
+      <%= f.label :article %>
+      <%= file_field_tag 'article[data_files[article]]' %> <br/>
     </div>
     <div>
-      <%= f.label :resume_rus %> <br/>
-      <%= f.file_field :resume_rus %>
+      <%= f.label :resume_rus %>
+      <%= file_field_tag 'article[data_files[resume_rus]]' %>
     </div>
     <div>
-      <%= f.label :resume_eng %> <br/>
-      <%= f.file_field :resume_eng %>
+      <%= f.label :resume_eng %>
+      <%= file_field_tag 'article[data_files[resume_eng]]' %>
     </div>
     <div>
-      <%= f.label :cover_note %> <br/>
-      <%= f.file_field :cover_note %>
+      <%= f.label :cover_note %>
+      <%= file_field_tag 'article[data_files[cover_note]]' %>
     </div>
     <div>
-      <%= check_box_tag 'has_review', '1', false, { onclick: 'changeVisibilityByCheckbox(has_review, "review_div")' } %> <br />
+      <%= hidden_field_tag 'has_review', '0' %>
+      <%= check_box_tag 'has_review', '1', false, { id: 'has_review_cb', onclick: 'changeVisibilityByCheckbox(has_review_cb, "review_div")' } %> <br />
     </div>
     <div class="hidden_tag" id='review_div'>
         <div>
-          <%= f.label :review %> <br/>
+          <%= f.label :review %>
           <%= f.file_field :review %> <br />
           <%= f.fields_for :censor do |censor_form| %>
             <%= render 'shared/person', form: censor_form, div_class: 'inline' %>
             <br class="clearBoth" />
             <div>
-                <%= censor_form.label :degree %> <br />
+                <%= censor_form.label :degree %>
                 <%= censor_form.text_field :degree %>
             </div>
             <div>
-                <%= censor_form.label :post %> <br />
+                <%= censor_form.label :post %>
                 <%= censor_form.text_field :post %>
             </div>
           <% end %>

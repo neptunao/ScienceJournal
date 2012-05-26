@@ -1,33 +1,43 @@
 class Article < ActiveRecord::Base
-  attr_accessible :status, :title, :data_files, :authors #TODO remove authors if author_ids using in params
+  ARTICLE_FILE_TAG = 'article'
+  RESUME_RUS_FILE_TAG = 'resume_rus'
+  RESUME_ENG_FILE_TAG = 'resume_eng'
+  COVER_NOTE_FILE_TAG = 'cover_note'
+  REVIEW_FILE_TAG = 'review'
+
+  attr_accessible :status, :title, :data_files, :authors
   has_many :data_files
   has_and_belongs_to_many :authors
-  has_one :censor
+  belongs_to :censor
   accepts_nested_attributes_for :authors
+  accepts_nested_attributes_for :censor
   validates :title, :status, presence: true
-  validates :data_files, :length => { in: 4..5 }
+  validates :article, :resume_rus, :resume_eng, :cover_note, presence: true
+  validates :data_files, :length => { maximum: 5 }
   validates :authors, :length => { in: 1..11 }
   after_save :after_save_action
 
   def article
-    data_files[0]
+    data_files.find_by_tag(ARTICLE_FILE_TAG)
   end
 
   def resume_rus
-    data_files[1]
+    data_files.find_by_tag(RESUME_RUS_FILE_TAG)
   end
 
   def resume_eng
-    data_files[2]
+    data_files.find_by_tag(RESUME_ENG_FILE_TAG)
   end
 
   def cover_note
-    data_files[3]
+    data_files.find_by_tag(COVER_NOTE_FILE_TAG)
   end
 
   def review
-    data_files[4]
+    data_files.find_by_tag(REVIEW_FILE_TAG)
   end
+
+  private
 
   def after_save_action
     DataFile.where(article_id: nil).destroy_all

@@ -24,6 +24,7 @@ group :development do
   gem 'rspec-rails'
   gem 'guard-rspec'
   gem 'guard-spork'
+  gem 'ruby-debug-base19x'
   gem 'ruby-debug19', :require => 'ruby-debug'
   gem 'ruby-debug-ide'
 end
