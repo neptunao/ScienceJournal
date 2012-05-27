@@ -1,9 +1,15 @@
 <%= render 'show' %>
 <% if current_user.role? :admin #TODO test and move to other controller%>
     <%= form_for @article do |f| %>
-        <b>Select censor:</b> <br/>
-        <%= f.hidden_field :status, value: Article::STATUS_TO_REVIEW %>
-        <%= f.select :censor_id, options_from_collection_for_select(Censor.all, "id", "fullname") %> <br />
+        <% case @article.status %>
+        <% when Article::STATUS_CREATED %>
+            <b>Select censor:</b> <br/>
+            <%= f.hidden_field :status, value: Article::STATUS_TO_REVIEW %>
+            <%= f.select :censor_id, options_from_collection_for_select(Censor.all, "id", "fullname") %> <br />
+        <% when Article::STATUS_REVIEWED %>
+            <b>Approve:</b>
+            <%= f.check_box :status, {}, Article::STATUS_APPROVED %> <br/>
+         <% end %>
         <%= f.submit %>
     <% end %>
 <% end %>

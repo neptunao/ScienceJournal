@@ -64,4 +64,15 @@ describe 'Admin' do
     article.censor.should eql censor
     article.status.should be Article::STATUS_TO_REVIEW
   end
+
+  it 'approve reviewed article' do
+    article = Article.create(title: 'test',
+                   data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                   authors: [FactoryGirl.create(:author)], status: Article::STATUS_REVIEWED)
+    visit article_path(article)
+    check 'article[status]'
+    click_button 'Update Article'
+    article.reload
+    article.status.should be Article::STATUS_APPROVED
+  end
 end

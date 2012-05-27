@@ -41,6 +41,7 @@ data_files = [article_file, resume_rus_file, resume_eng_file, cover_note_file]
 
 #articles
 Article.create(title: 'test', data_files: data_files, authors: [author1])
+Article.create(title: 'test_reviewed', data_files: data_files, authors: [author1], status: Article::STATUS_REVIEWED)
 
 #Categories
 root = Category.create(title: 'root')
