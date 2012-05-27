@@ -19,6 +19,9 @@
                 <% if current_user.role? :admin %>
                     <%= render 'layouts/admin_links' %>
                 <% end %>
+                <% if current_user.role? :author    #TODO TEST %>
+                    <%= render 'layouts/author_links' %>
+                <% end %>
                 <li><%= link_to 'Sign out', logout_path %></li>
             <% else %>
                 <li><%= link_to 'Sign in', login_path %></li>
