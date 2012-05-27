@@ -14,7 +14,7 @@ class Ability
       can :update, user.person
       can :create, Article
     end
-    if user.role? :censor
+    if user.role?(:censor) && user.is_approved?
       can :read, Article, censor_id: user.person.id if user.person
     end
     # Define abilities for the passed in user here. For example:

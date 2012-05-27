@@ -6,6 +6,7 @@ describe ArticlesController do
     load "#{Rails.root}/db/seeds.rb"
     @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.create(:censor_user)
+    @censor_user.update_attribute(:is_approved, true)
     @censor_user.update_attribute(:person, FactoryGirl.create(:censor))
     @users = [@author_user, @censor_user]
     @admin_user = FactoryGirl.create(:admin_user)

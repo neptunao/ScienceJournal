@@ -18,8 +18,9 @@ describe 'Abilities of' do
     load "#{Rails.root}/db/seeds.rb"
     @guest_user = FactoryGirl.build(:guest_user)
     @author_user = FactoryGirl.create(:user)
-    @censor_user = FactoryGirl.build(:censor_user)
+    @censor_user = FactoryGirl.create(:censor_user)
     @censor_user.person = FactoryGirl.create(:censor)
+    @censor_user.update_attribute(:is_approved, true)
   end
 
   after :all do
@@ -89,5 +90,11 @@ describe 'Abilities of' do
     article1 = Article.new
     censor_user_ability.should be_can(:read, article)
     censor_user_ability.should_not be_can(:read, article1)
+  end
+
+  it 'unapproved user can noting' do
+    article = Article.create(censor_id: @censor_user.person.id)
+    @censor_user.is_approved = false
+    censor_user_ability.should_not be_can(:read, article)
   end
 end
