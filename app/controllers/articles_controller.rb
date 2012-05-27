@@ -1,11 +1,11 @@
 class ArticlesController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :precreate_article, only: :create
+  before_filter :initialize_assigns, only: [:create, :index]
   load_and_authorize_resource
 
   def index
-    @articles = Article.all
-    @articles = Article.where(status: params[:status]) unless params[:status].nil?
+    exp = params.select { |k, v| k == 'status' || k == 'censor_id' }
+    @articles = Article.where(exp) unless params[:status].nil?
   end
 
   def new
@@ -52,8 +52,9 @@ class ArticlesController < ApplicationController
 
   private
 
-  def precreate_article
+  def initialize_assigns
     @article = Article.new
     @article.censor = Censor.new
+    @articles = Article.accessible_by(current_ability)  #TODO test
   end
 end

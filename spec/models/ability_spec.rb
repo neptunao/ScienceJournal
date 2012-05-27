@@ -14,10 +14,12 @@ describe 'Abilities of' do
   end
 
   before :all do
+    User.destroy_all
     load "#{Rails.root}/db/seeds.rb"
     @guest_user = FactoryGirl.build(:guest_user)
     @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.build(:censor_user)
+    @censor_user.person = FactoryGirl.create(:censor)
   end
 
   after :all do
@@ -80,5 +82,12 @@ describe 'Abilities of' do
     guest_user_ability.should_not be_can(:create, Article)
     author_user_ability.should be_can(:create, Article)
     censor_user_ability.should_not be_can(:create, Article)
+  end
+
+  it 'censor can read only articles that he own' do
+    article = Article.create(censor_id: @censor_user.person.id)
+    article1 = Article.new
+    censor_user_ability.should be_can(:read, article)
+    censor_user_ability.should_not be_can(:read, article1)
   end
 end

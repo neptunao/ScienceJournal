@@ -6,6 +6,7 @@ describe ArticlesController do
     load "#{Rails.root}/db/seeds.rb"
     @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.create(:censor_user)
+    @censor_user.update_attribute(:person, FactoryGirl.create(:censor))
     @users = [@author_user, @censor_user]
     @admin_user = FactoryGirl.create(:admin_user)
     @author = FactoryGirl.create(:author)
@@ -126,12 +127,17 @@ describe ArticlesController do
   describe '.index' do
     before :each do
       Article.destroy_all
+      data_files = [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)]
+      Article.create(title: 'test', data_files: data_files, authors: [FactoryGirl.create(:author)])
       Article.create(title: 'test',
-                     data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                     authors: [FactoryGirl.create(:author)])
+                         data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                         authors: [FactoryGirl.create(:author)], status: Article::STATUS_REVIEWED)
       Article.create(title: 'test',
-                     data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                     authors: [FactoryGirl.create(:author)], status: Article::STATUS_REVIEWED)
+                         data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                         authors: [FactoryGirl.create(:author)], status: Article::STATUS_TO_REVIEW)
+      @censor_article = Article.create(title: 'test',
+                         data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                         authors: [FactoryGirl.create(:author)], status: Article::STATUS_TO_REVIEW, censor_id: @censor_user.person.id)
     end
 
     it 'redirect to root if not admin' do
@@ -160,14 +166,22 @@ describe ArticlesController do
       assigns(:articles).should be =~ Article.where(status: Article::STATUS_REVIEWED)
       sign_out @admin_user
     end
-  end
 
-  it 'assigns articles without params as @articles' do
-    sign_in @admin_user
-    get :index
-    assigns(:articles).should_not be_nil
-    assigns(:articles).should be =~ Article.all
-    sign_out @admin_user
+    it 'assigns articles without params as @articles' do
+      sign_in @admin_user
+      get :index
+      assigns(:articles).should_not be_nil
+      assigns(:articles).should be =~ Article.all
+      sign_out @admin_user
+    end
+
+    it 'assigns censor articles as @articles' do
+      sign_in @censor_user
+      get :index, { status: Article::STATUS_TO_REVIEW, censor_id: @censor_user.person.id }
+      assigns(:articles).count.should be 1
+      assigns(:articles)[0].should eql @censor_article
+      sign_out @censor_user
+    end
   end
 
   describe '.show' do

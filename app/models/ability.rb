@@ -14,6 +14,9 @@ class Ability
       can :update, user.person
       can :create, Article
     end
+    if user.role? :censor
+      can :read, Article, censor_id: user.person.id if user.person
+    end
     # Define abilities for the passed in user here. For example:
     #
     #   user ||= User.new # guest user (not logged in)
