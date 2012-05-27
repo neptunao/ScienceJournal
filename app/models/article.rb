@@ -6,6 +6,7 @@ class Article < ActiveRecord::Base
   REVIEW_FILE_TAG = 'review'
   STATUS_CREATED = 0
   STATUS_TO_REVIEW = 2
+  STATUS_REVIEWED = 3
 
   attr_accessible :status, :title, :data_files, :authors, :censor_id
   has_many :data_files

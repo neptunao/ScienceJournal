@@ -5,13 +5,7 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = Article.all
-    unless params[:review].nil?
-      if params[:review] == '0'
-        @articles = Article.find_all_by_status(Article::STATUS_CREATED)
-      else
-        @articles = Article.select { |i| i.status != Article::STATUS_CREATED }
-      end
-    end
+    @articles = Article.where(status: params[:status]) unless params[:status].nil?
   end
 
   def new

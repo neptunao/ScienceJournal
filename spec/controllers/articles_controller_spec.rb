@@ -131,7 +131,7 @@ describe ArticlesController do
                      authors: [FactoryGirl.create(:author)])
       Article.create(title: 'test',
                      data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                     authors: [FactoryGirl.create(:author)], status: Article::STATUS_TO_REVIEW)
+                     authors: [FactoryGirl.create(:author)], status: Article::STATUS_REVIEWED)
     end
 
     it 'redirect to root if not admin' do
@@ -145,19 +145,19 @@ describe ArticlesController do
 
     it 'assigns articles without review as @articles' do
       sign_in @admin_user
-      get :index, { review: '0' }
+      get :index, { status: Article::STATUS_CREATED }
       assigns(:articles).should_not be_nil
       assigns(:articles).should_not eql Article.all
-      assigns(:articles).should eql Article.find_all_by_status(Article::STATUS_CREATED)
+      assigns(:articles).should be =~ Article.find_all_by_status(Article::STATUS_CREATED)
       sign_out @admin_user
     end
 
     it 'assigns articles with review as @articles' do
       sign_in @admin_user
-      get :index, { review: '1' }
+      get :index, { status: Article::STATUS_REVIEWED }
       assigns(:articles).should_not be_nil
       assigns(:articles).should_not eql Article.all
-      assigns(:articles).should eql Article.all.select { |a| a.status != Article::STATUS_CREATED}
+      assigns(:articles).should be =~ Article.where(status: Article::STATUS_REVIEWED)
       sign_out @admin_user
     end
   end
@@ -166,7 +166,7 @@ describe ArticlesController do
     sign_in @admin_user
     get :index
     assigns(:articles).should_not be_nil
-    assigns(:articles).should eql Article.all
+    assigns(:articles).should be =~ Article.all
     sign_out @admin_user
   end
 
