@@ -37,7 +37,7 @@ class ArticlesController < ApplicationController
       redirect_to root_path
     else
       @article.data_files.destroy_all
-      coauthors.each { |a| a.destroy } unless coauthors.empty? #TODO TEst
+      coauthors.each { |a| a.destroy } unless coauthors.empty?
       @article.censor = Censor.new if @article.censor.nil?
       render :new
     end
