@@ -5,8 +5,9 @@ class Article < ActiveRecord::Base
   COVER_NOTE_FILE_TAG = 'cover_note'
   REVIEW_FILE_TAG = 'review'
   STATUS_CREATED = 0
+  STATUS_TO_REVIEW = 2
 
-  attr_accessible :status, :title, :data_files, :authors
+  attr_accessible :status, :title, :data_files, :authors, :censor_id
   has_many :data_files
   has_and_belongs_to_many :authors
   belongs_to :censor

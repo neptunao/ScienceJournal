@@ -6,12 +6,17 @@ class DataFile < ActiveRecord::Base
   def self.upload(file, tag = '')
     path = File.join('public/data', file.original_filename)
     File.open(path, "wb") { |f| f.write(file.read) }
-    DataFile.create!(filename: path, tag: tag)
+    filename = "data/#{file.original_filename}"
+    DataFile.create!(filename: filename, tag: tag)
   end
 
   private
 
+  def full_path
+    "public/#{filename}"
+  end
+
   def after_destroy_action
-    File.delete(filename) if File.exist? filename #TODO validates exist filename
+    File.delete(full_path) if File.exist? full_path #TODO validates exist filename
   end
 end

@@ -1,0 +1,20 @@
+<h1>Article</h1>
+<p>
+  <b>Title:</b>
+  <%= @article.title %>
+</p>
+<b>Downloads:</b>
+<ul>
+  <li><%= link_to 'Download article', "#{root_url}#{@article.article.filename}" %></li>
+  <li><%= link_to 'Download russian resume', "#{root_url}#{@article.resume_rus.filename}" %></li>
+  <li><%= link_to 'Download english resume', "#{root_url}#{@article.resume_eng.filename}" %></li>
+  <li><%= link_to 'Download cover note', "#{root_url}#{@article.cover_note.filename}" %></li>
+</ul>
+<% if @article.censor %>
+    <b>Censor:</b>
+    <%= @article.censor.fullname %>
+    Post:
+    <%= @article.censor.post %>
+    Degree:
+    <%= @article.censor.degree %>
+<% end %>

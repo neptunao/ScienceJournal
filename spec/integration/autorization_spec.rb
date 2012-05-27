@@ -19,7 +19,7 @@ describe 'Autorization' do
     login @user
     response.should_not have_selector 'a', href: '/login', content: 'Sign in'
     response.should_not have_selector 'a', href: '/register', content: 'Sign up'
-    response.should_not have_selector 'a', href: articles_path(review: false)
+    response.should_not have_selector 'a', href: articles_path(review: 0)
     response.should have_selector 'a', href: '/logout', content: 'Sign out'
     response.should have_selector 'a', href: '/profile/show'
     response.should have_selector 'a', href: '/profile/edit_personal'
@@ -30,14 +30,14 @@ describe 'Autorization' do
     response.should_not have_selector 'a', href: '/logout', content: 'Sign out'
     response.should_not have_selector 'a', href: '/profile/show'
     response.should_not have_selector 'a', href: '/profile/edit_personal'
-    response.should_not have_selector 'a', href: articles_path(review: false)
+    response.should_not have_selector 'a', href: articles_path(review: 0)
     response.should have_selector 'a', href: '/login', content: 'Sign in'
     response.should have_selector 'a', href: '/register', content: 'Sign up'
   end
 
   it 'render admin links' do
     login @admin
-    response.should have_selector 'a', href: articles_path(review: false)
+    response.should have_selector 'a', href: articles_path(review: 0)
   end
 
   it 'edit profile page contains name field' do

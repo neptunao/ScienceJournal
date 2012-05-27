@@ -16,6 +16,9 @@ Role.create(name: :admin)
 author1 = Author.create(first_name: 'first_name', middle_name: 'middle_name', last_name: 'last_name')
 Author.create(first_name: 'first_name1', middle_name: 'middle_name1', last_name: 'last_name1')
 
+#Censors
+Censor.create(first_name: 'first_name1', middle_name: 'middle_name1', last_name: 'last_name1', post: 'test', degree: 'test')
+
 #users
 
 User.create!(name: 'admin', email: 'duxcomus@mail.ru', password: 'adminadmin',
@@ -28,6 +31,15 @@ author_user.update_attribute(:person, author1)
 User.create!(name: 'censor', email: 'censor@mail.ru', password: '123456',
                      password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.censor_role.id])
 
+#data_files
+article_file = DataFile.create(filename: '1test1', tag: Article::ARTICLE_FILE_TAG)
+resume_rus_file = DataFile.create(filename: '2test2', tag: Article::RESUME_RUS_FILE_TAG)
+resume_eng_file = DataFile.create(filename: '3test3', tag: Article::RESUME_ENG_FILE_TAG)
+cover_note_file = DataFile.create(filename: '4test4', tag: Article::COVER_NOTE_FILE_TAG)
+data_files = [article_file, resume_rus_file, resume_eng_file, cover_note_file]
+
+#articles
+Article.create(title: 'test', data_files: data_files, authors: [author1])
 
 #Categories
 root = Category.create(title: 'root')

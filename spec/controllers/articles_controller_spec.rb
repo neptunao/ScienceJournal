@@ -27,6 +27,12 @@ describe ArticlesController do
     user
   end
 
+  def create_article
+    Article.create(title: 'test',
+                   data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                   authors: [FactoryGirl.create(:author)])
+  end
+
   describe '.new' do
     it 'redirect to login if guest' do
       get :new
@@ -104,6 +110,7 @@ describe ArticlesController do
       expect { post :create, @min_params }.to change(Article, :count).by(1)
       response.should redirect_to root_path
       sign_out user
+      DataFile.destroy_all
     end
 
     it 'delete files if errors' do
@@ -117,6 +124,16 @@ describe ArticlesController do
   end
 
   describe '.index' do
+    before :each do
+      Article.destroy_all
+      Article.create(title: 'test',
+                     data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                     authors: [FactoryGirl.create(:author)])
+      Article.create(title: 'test',
+                     data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                     authors: [FactoryGirl.create(:author)], status: Article::STATUS_TO_REVIEW)
+    end
+
     it 'redirect to root if not admin' do
       @users.each do |user|
         sign_in user
@@ -128,12 +145,37 @@ describe ArticlesController do
 
     it 'assigns articles without review as @articles' do
       sign_in @admin_user
-      Article.create(title: 'test',
-                     data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                     authors: [FactoryGirl.create(:author)])
       get :index, { review: '0' }
       assigns(:articles).should_not be_nil
-      assigns(:articles) =~ Article.find_all_by_status(Article::STATUS_CREATED)
+      assigns(:articles).should_not eql Article.all
+      assigns(:articles).should eql Article.find_all_by_status(Article::STATUS_CREATED)
+      sign_out @admin_user
+    end
+
+    it 'assigns articles with review as @articles' do
+      sign_in @admin_user
+      get :index, { review: '1' }
+      assigns(:articles).should_not be_nil
+      assigns(:articles).should_not eql Article.all
+      assigns(:articles).should eql Article.all.select { |a| a.status != Article::STATUS_CREATED}
+      sign_out @admin_user
+    end
+  end
+
+  it 'assigns articles without params as @articles' do
+    sign_in @admin_user
+    get :index
+    assigns(:articles).should_not be_nil
+    assigns(:articles).should eql Article.all
+    sign_out @admin_user
+  end
+
+  describe '.show' do
+    it 'assigns @article' do
+      sign_in @admin_user
+      article = create_article
+      get :show, id: article.id
+      assigns(:article).should eql article
       sign_out @admin_user
     end
   end

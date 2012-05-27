@@ -4,7 +4,14 @@ class ArticlesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @articles = Article.find_all_by_status(Article::STATUS_CREATED)
+    @articles = Article.all
+    unless params[:review].nil?
+      if params[:review] == '0'
+        @articles = Article.find_all_by_status(Article::STATUS_CREATED)
+      else
+        @articles = Article.select { |i| i.status != Article::STATUS_CREATED }
+      end
+    end
   end
 
   def new
@@ -32,6 +39,20 @@ class ArticlesController < ApplicationController
       @article.data_files.destroy_all
       @article.censor = Censor.new if @article.censor.nil?
       render :new
+    end
+  end
+
+  def show
+    @article = Article.find(params[:id])
+  end
+
+  def update  #TODO TEST
+    @article = Article.find(params[:id])
+    if @article.update_attributes(params[:article])
+      flash[:notice] = 'Article updated successfully.'
+      redirect_to root_path
+    else
+      render :show
     end
   end
 

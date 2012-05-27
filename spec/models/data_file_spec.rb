@@ -3,7 +3,8 @@ include ActionDispatch::TestProcess
 
 describe DataFile do
   before :all do
-    @short_filename = 'public/data/test_upload.txt'
+    @short_filename = 'data/test_upload.txt'
+    @full_filename = 'public/data/test_upload.txt'
     @filename = "#{Rails.root}/#@short_filename"
   end
 
@@ -21,10 +22,10 @@ describe DataFile do
   end
 
   it 'upload action is successfull' do
-    File.exist?(@filename).should be_false
+    File.exist?(@full_filename).should be_false
     DataFile.upload(fixture_file_upload("/test_data/test_upload.txt"))
-    File.exist?(@filename).should be_true
-    File.open(@filename, 'r') { |f| f.read.should be_eql "test" }
+    File.exist?(@full_filename).should be_true
+    File.open(@full_filename, 'r') { |f| f.read.should be_eql "test" }
   end
 
   it 'uploading non-existing file does not create new file' do

@@ -51,4 +51,17 @@ describe 'Admin' do
     response.should_not have_selector 'input', type: 'submit'
     response.should have_selector 'p'
   end
+
+  it 'attach article to censor' do
+    censor = FactoryGirl.create(:censor)
+    article = Article.create(title: 'test',
+                   data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                   authors: [FactoryGirl.create(:author)])
+    visit article_path(article)
+    select censor.fullname, from: "article[censor_id]"
+    click_button 'Update Article'
+    article.reload
+    article.censor.should eql censor
+    article.status.should be Article::STATUS_TO_REVIEW
+  end
 end
