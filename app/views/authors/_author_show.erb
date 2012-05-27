@@ -1,15 +1,2 @@
 <h1>Author information</h1>
-<p>
-  <b>First name:</b>
-  <%= object.first_name %>
-</p>
-<% if object.middle_name %>
-    <p>
-      <b>Middle name:</b>
-      <%= object.middle_name %>
-    </p>
-<% end %>
-<p>
-  <b>Last name:</b>
-  <%= object.last_name %>
-</p>
+<%= render 'shared/person_show', object: object %>

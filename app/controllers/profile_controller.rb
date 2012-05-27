@@ -6,13 +6,15 @@ class ProfileController < ApplicationController
 
   def edit_personal_info
     if current_user.person.nil?
-      current_user.person = Author.new
+      current_user.person = Author.new if current_user.role? :author
+      current_user.person = Censor.new if current_user.role? :censor
     end
   end
 
   def update
     person_attr = params[:user][:person]
-    person = Author.new(person_attr)
+    person =  Author.new(person_attr) if current_user.role? :author
+    person =  Censor.new(person_attr) if current_user.role? :censor
     result = person.valid?
 
     unless result

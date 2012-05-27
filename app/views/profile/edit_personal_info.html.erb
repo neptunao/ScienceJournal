@@ -3,6 +3,7 @@
     <%= f.fields_for :person, f.object.person do |person_f| %>
         <%= render 'shared/errors_explanation', object: person_f.object %>
         <%= render 'shared/person', form: person_f %>
+        <%= render 'censors/censor', form: person_f if current_user.role? :censor %>
     <% end %>
     <div>
       <%= f.submit %>

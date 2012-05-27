@@ -17,7 +17,7 @@ author1 = Author.create(first_name: 'first_name', middle_name: 'middle_name', la
 Author.create(first_name: 'first_name1', middle_name: 'middle_name1', last_name: 'last_name1')
 
 #Censors
-Censor.create(first_name: 'first_name1', middle_name: 'middle_name1', last_name: 'last_name1', post: 'test', degree: 'test')
+censor1 = Censor.create(first_name: 'first_name1', middle_name: 'middle_name1', last_name: 'last_name1', post: 'test', degree: 'test')
 
 #users
 
@@ -28,8 +28,9 @@ author_user = User.create!(name: 'author', email: 'author1@mail.ru', password: '
                      password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.author_role.id])
 author_user.update_attribute(:person, author1)
 
-User.create!(name: 'censor', email: 'censor@mail.ru', password: '123456',
+censor_user = User.create!(name: 'censor', email: 'censor@mail.ru', password: '123456',
                      password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.censor_role.id])
+censor_user.update_attribute(:person, censor1)
 
 #data_files
 article_file = DataFile.create(filename: '1test1', tag: Article::ARTICLE_FILE_TAG)

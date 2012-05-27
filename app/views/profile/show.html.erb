@@ -1,6 +1,7 @@
 <%= render 'users/user_show', user: current_user %>
 <% if current_user.person %>
-    <%= render 'authors/author_show', object: current_user.person %>
+    <%= render 'authors/author_show', object: current_user.person if current_user.role? :author %>
+    <%= render 'censors/censor_show', object: current_user.person if current_user.role? :censor %>
 <% else  %>
     User has not personal info.
 <% end %>
