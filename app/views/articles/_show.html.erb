@@ -3,6 +3,14 @@
   <b>Title:</b>
   <%= @article.title %>
 </p>
+<p>
+  <b>Authors:</b>
+      <ul>
+        <% @article.authors.each do |author| %>
+            <li>Name: <%= author.fullname %></li>
+        <% end %>
+  </ul>
+</p>
 <b>Downloads:</b>
 <ul>
   <li><%= link_to 'Download article', "#{root_url}#{@article.article.filename}" %></li>

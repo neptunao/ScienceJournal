@@ -26,11 +26,18 @@ class ArticlesController < ApplicationController
       data_files << DataFile.upload(files[:resume_eng], Article::RESUME_ENG_FILE_TAG) unless files[:resume_eng].nil?
       data_files << DataFile.upload(files[:cover_note], Article::COVER_NOTE_FILE_TAG) unless files[:cover_note].nil?
     end
-    @article = Article.new(title: params[:article][:title], data_files: data_files, authors: [current_user.person])
+    coauthors = []
+    if params[:article][:authors_attributes]
+      params[:article][:authors_attributes].each do |k, v|
+        coauthors << Author.create(first_name: v[:first_name], middle_name: v[:middle_name], last_name: v[:last_name])
+      end
+    end
+    @article = Article.new(title: params[:article][:title], data_files: data_files, authors: coauthors << current_user.person)
     if @article.save
       redirect_to root_path
     else
       @article.data_files.destroy_all
+      coauthors.each { |a| a.destroy } unless coauthors.empty? #TODO TEst
       @article.censor = Censor.new if @article.censor.nil?
       render :new
     end

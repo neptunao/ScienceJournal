@@ -3,4 +3,8 @@ class Author < ActiveRecord::Base
   validates :first_name, :last_name, presence: true
   has_one :user, as: :person
   has_and_belongs_to_many :articles
+
+  def fullname
+    "#{last_name} #{first_name} #{middle_name}"
+  end
 end

@@ -34,6 +34,7 @@
     </div>
     <div>
       <%= hidden_field_tag 'has_review', '0' %>
+      Attach review:
       <%= check_box_tag 'has_review', '1', false, { id: 'has_review_cb', onclick: 'changeVisibilityByCheckbox(has_review_cb, "review_div")' } %> <br />
     </div>
     <div class="hidden_tag" id='review_div'>

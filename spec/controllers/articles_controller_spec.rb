@@ -68,7 +68,12 @@ describe ArticlesController do
           article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
                                  has_review: '0', censor_attributes: { first_name: '', last_name: '' }
       } }
-      @full_params = nil
+      @full_params = { article: { title: 'test',
+                                 authors_attributes: { new_1338158908597: { first_name: 'a', middle_name: 'b', last_name: 'c', destroy: false} },
+                                 data_files: {
+          article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
+                                 has_review: '0', censor_attributes: { first_name: '', last_name: '' }
+      } }
     end
 
     it 'redirect to login if guest' do
@@ -121,6 +126,29 @@ describe ArticlesController do
       sign_in user
       post :create, { article: { title: 'test', data_files: { article: @article_file } } }
       DataFile.all.should be_empty
+      sign_out user
+    end
+
+    it 'with coauthors' do
+      user = create_user
+      sign_in user
+      post :create, @full_params
+      Article.last.authors.count.should be 2
+      Article.last.authors[1].should eql user.person
+      Article.last.authors[0].first_name.should eql 'a'
+      Article.last.authors[0].middle_name.should eql 'b'
+      Article.last.authors[0].last_name.should eql 'c'
+      sign_out user
+    end
+
+    it 'destroy coauthors if invalid' do
+      Author.destroy_all
+      user = create_user
+      sign_in user
+      invalid_params = @full_params
+      invalid_params[:article].delete(:data_files)
+      post :create, @full_params
+      Author.count.should be 0
       sign_out user
     end
   end
