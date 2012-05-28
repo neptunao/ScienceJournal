@@ -51,7 +51,7 @@ class ArticlesController < ApplicationController
       @article.data_files.destroy_all
       @article.censor.destroy if @article.censor
       @article.censor = Censor.new if @article.censor.nil?
-      @article.errors.add(:review, 'Missing review attachment.') if invalid_article
+      @article.errors.add(:review, 'attachment is missing.') if invalid_article
       render :new
     end
   end
