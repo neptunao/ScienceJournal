@@ -7,6 +7,7 @@ describe 'articles/new' do
   end
 
   before(:each) do
+    assign(:authors, [FactoryGirl.create(:author)])
     assign(:article, stub_model(Article, title: "Test", data_files: @files, censor: Censor.new ).as_new_record)
     render
   end
@@ -26,11 +27,7 @@ describe 'articles/new' do
   end
 
   it 'should render fields for coauthors' do
-    rendered.should have_selector 'input', name: 'article[authors_attributes][new_authors][first_name]'
-    rendered.should have_selector 'input', name: 'article[authors_attributes][new_authors][middle_name]'
-    rendered.should have_selector 'input', name: 'article[authors_attributes][new_authors][last_name]'
-    rendered.should have_selector 'a', class: 'add_nested_fields'
-    rendered.should have_selector 'input', name: 'article[authors_attributes][new_authors][_destroy]'
+    rendered.should have_selector 'input', name: 'article[author_ids][]'
   end
 
   it 'should render review' do

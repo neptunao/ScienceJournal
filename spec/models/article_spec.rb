@@ -17,7 +17,7 @@ describe Article do
   end
 
   def create_valid_article
-    article = Article.new(title: 'test', authors: [FactoryGirl.create(:author)])
+    article = Article.new(title: 'test', author_ids: [FactoryGirl.create(:author).id])
     article.data_files = create_data_files
     article
   end
@@ -66,7 +66,7 @@ describe Article do
 
   it 'destroy old data_files before save' do
     DataFile.destroy_all
-    article = Article.new(title: 'test', authors: [FactoryGirl.create(:author)])
+    article = Article.new(title: 'test', author_ids: [FactoryGirl.create(:author).id])
     article.data_files = [DataFile.create(filename: 'test1')]
     article.data_files = create_data_files
     article.data_files.count.should be 6

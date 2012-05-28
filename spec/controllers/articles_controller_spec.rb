@@ -33,7 +33,7 @@ describe ArticlesController do
   def create_article
     Article.create(title: 'test',
                    data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                   authors: [FactoryGirl.create(:author)])
+                   author_ids: [FactoryGirl.create(:author).id])
   end
 
   describe '.new' do
@@ -61,12 +61,24 @@ describe ArticlesController do
       get :new
       response.should redirect_to edit_personal_path
     end
+
+    it 'assign to @authors all authors without current' do
+      Author.destroy_all
+      user = create_user
+      author = FactoryGirl.create(:author)
+      author1 = FactoryGirl.create(:author)
+      sign_in user
+      get :new
+      puts Author.count
+      assigns(:authors).should eql [author, author1]
+      sign_out user
+    end
   end
 
   describe '.create' do
     def full_params
-      { article: { title: 'test',
-                                       authors_attributes: { new_1338158908597: { first_name: 'a', middle_name: 'b', last_name: 'c', destroy: false} },
+      author = Author.create(first_name: 'a', middle_name: 'b', last_name: 'c')
+      { article: { title: 'test', author_ids: ['', author.id],
                                        data_files: {
                 article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
                                        has_review: '1', review: @review_file, censor_attributes: { first_name: 'a1', middle_name: 'a2' ,last_name: 'a3', degree: 'a4', post: 'a5' }
@@ -74,7 +86,7 @@ describe ArticlesController do
     end
 
     before :all do
-      @min_params = { article: { title: 'test', data_files: {
+      @min_params = { article: { title: 'test', author_ids: [''], data_files: {
           article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
                                  has_review: '0', censor_attributes: { first_name: '', last_name: '' }
       } }
@@ -97,19 +109,19 @@ describe ArticlesController do
     it 'render new if errors' do
       user = create_user
       sign_in user
-      post :create, { article: { title: 'test' } }
+      post :create, { article: { title: 'test', author_ids: [''] } }
       response.should render_template 'articles/new'
 
-      post :create, { article: { title: 'test', data_files: { article: @article_file } } }
+      post :create, { article: { title: 'test', data_files: { article: @article_file }, author_ids: [''] } }
       response.should render_template 'articles/new'
 
-      post :create, { article: { title: 'test', data_files: { resume_rus: @resume_rus_file } } }
+      post :create, { article: { title: 'test', data_files: { resume_rus: @resume_rus_file }, author_ids: [''] } }
       response.should render_template 'articles/new'
 
-      post :create, { article: { title: 'test', data_files: { resume_eng: @resume_eng_file } } }
+      post :create, { article: { title: 'test', data_files: { resume_eng: @resume_eng_file }, author_ids: [''] } }
       response.should render_template 'articles/new'
 
-      post :create, { article: { title: 'test', data_files: { cover_note: @cover_note_file } } }
+      post :create, { article: { title: 'test', data_files: { cover_note: @cover_note_file }, author_ids: [''] } }
       response.should render_template 'articles/new'
 
       sign_out user
@@ -128,7 +140,7 @@ describe ArticlesController do
       DataFile.destroy_all
       user = create_user
       sign_in user
-      post :create, { article: { title: 'test', data_files: { article: @article_file } } }
+      post :create, { article: { title: 'test', data_files: { article: @article_file }, author_ids: [''] } }
       DataFile.all.should be_empty
       sign_out user
     end
@@ -140,17 +152,6 @@ describe ArticlesController do
       Article.last.authors.count.should be 2
       Article.last.authors.any? { |a| a ==  user.person }.should be_true
       Article.last.authors.any? { |a| a.first_name == 'a' && a.middle_name == 'b' && a.last_name == 'c' }.should be_true
-      sign_out user
-    end
-
-    it 'destroy coauthors if invalid' do
-      Author.destroy_all
-      user = create_user
-      sign_in user
-      invalid_params = full_params
-      invalid_params[:article].delete(:data_files)
-      post :create, invalid_params
-      Author.count.should be 0
       sign_out user
     end
 
@@ -201,16 +202,16 @@ describe ArticlesController do
     before :each do
       Article.destroy_all
       data_files = [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)]
-      Article.create(title: 'test', data_files: data_files, authors: [FactoryGirl.create(:author)])
+      Article.create(title: 'test', data_files: data_files, author_ids: [FactoryGirl.create(:author).id])
       Article.create(title: 'test',
                          data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                         authors: [FactoryGirl.create(:author)], status: Article::STATUS_REVIEWED)
+                         author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_REVIEWED)
       Article.create(title: 'test',
                          data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                         authors: [FactoryGirl.create(:author)], status: Article::STATUS_TO_REVIEW)
+                         author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_TO_REVIEW)
       @censor_article = Article.create(title: 'test',
                          data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                         authors: [FactoryGirl.create(:author)], status: Article::STATUS_TO_REVIEW, censor_id: @censor_user.person.id)
+                         author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_TO_REVIEW, censor_id: @censor_user.person.id)
     end
 
     it 'redirect to root if not admin' do

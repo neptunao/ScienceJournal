@@ -15,6 +15,7 @@ class ArticlesController < ApplicationController
     end
     @article = Article.new
     @article.censor = Censor.new
+    @authors = Author.select { |a| a.id != current_user.person.id }
   end
 
   def create  #TODO refactoring
@@ -26,12 +27,8 @@ class ArticlesController < ApplicationController
       data_files << DataFile.upload(files[:resume_eng], Article::RESUME_ENG_FILE_TAG) unless files[:resume_eng].nil?
       data_files << DataFile.upload(files[:cover_note], Article::COVER_NOTE_FILE_TAG) unless files[:cover_note].nil?
     end
-    coauthors = []
-    if params[:article][:authors_attributes]
-      params[:article][:authors_attributes].each do |k, v|
-        coauthors << Author.create(first_name: v[:first_name], middle_name: v[:middle_name], last_name: v[:last_name])
-      end
-    end
+
+    authors_ids = params[:article][:author_ids] << current_user.person.id
 
     censor = nil
     status = Article::STATUS_CREATED
@@ -41,7 +38,7 @@ class ArticlesController < ApplicationController
       status = Article::STATUS_REVIEWED
     end
 
-    @article = Article.new(title: params[:article][:title], data_files: data_files, authors: coauthors << current_user.person, status: status)
+    @article = Article.new(title: params[:article][:title], data_files: data_files, author_ids: authors_ids, status: status)
     @article.censor_id = censor.id if censor
 
     if @article.save
@@ -49,7 +46,6 @@ class ArticlesController < ApplicationController
     else
       @article.data_files.destroy_all
       @article.censor.destroy if @article.censor
-      coauthors.each { |a| a.destroy } unless coauthors.empty?
       @article.censor = Censor.new if @article.censor.nil?
       render :new
     end

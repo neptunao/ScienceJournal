@@ -9,7 +9,7 @@ class Article < ActiveRecord::Base
   STATUS_REVIEWED = 2
   STATUS_APPROVED = 3
 
-  attr_accessible :status, :title, :data_files, :authors, :censor_id
+  attr_accessible :status, :title, :data_files, :author_ids, :censor_id
   has_many :data_files
   has_and_belongs_to_many :authors
   belongs_to :censor

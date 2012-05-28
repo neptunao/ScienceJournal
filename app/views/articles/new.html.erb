@@ -6,15 +6,10 @@
       <%= f.text_field :title %>
     </div>
     <div>
-      <%= f.fields_for :authors do |f_a| %>
-          <div>
-            <%= render 'shared/person', form: f_a, div_class: 'inline' %>
-            <br />
-            <%= f_a.link_to_remove 'Remove' %>
-            <br class="clearBoth" />
-          </div>
-      <% end %>
-      <%= f.link_to_add 'Add', :authors %>
+        <b>Coauthors:</b>
+        <%= f.select :author_ids, options_from_collection_for_select(@authors, 'id', 'fullname'),
+                     {:include_blank => false}, { :multiple => true, :size => 10 }
+          %>
     </div>
     <div>
       <%= f.label :article %>

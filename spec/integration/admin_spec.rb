@@ -56,7 +56,7 @@ describe 'Admin' do
     censor = FactoryGirl.create(:censor)
     article = Article.create(title: 'test',
                    data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                   authors: [FactoryGirl.create(:author)])
+                   author_ids: [FactoryGirl.create(:author).id])
     visit article_path(article)
     select censor.fullname, from: "article[censor_id]"
     click_button 'Update Article'
@@ -68,7 +68,7 @@ describe 'Admin' do
   it 'approve reviewed article' do
     article = Article.create(title: 'test',
                    data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                   authors: [FactoryGirl.create(:author)], status: Article::STATUS_REVIEWED)
+                   author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_REVIEWED)
     visit article_path(article)
     check 'article[status]'
     click_button 'Update Article'
