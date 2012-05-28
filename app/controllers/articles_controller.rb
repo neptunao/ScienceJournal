@@ -17,41 +17,19 @@ class ArticlesController < ApplicationController
     @article.censor = Censor.new
   end
 
-  def create  #TODO refactoring
-    files = params[:article][:data_files]
-    data_files = []
-    unless files.nil?
-      data_files << DataFile.upload(files[:article], Article::ARTICLE_FILE_TAG) unless files[:article].nil?
-      data_files << DataFile.upload(files[:resume_rus], Article::RESUME_RUS_FILE_TAG) unless files[:resume_rus].nil?
-      data_files << DataFile.upload(files[:resume_eng], Article::RESUME_ENG_FILE_TAG) unless files[:resume_eng].nil?
-      data_files << DataFile.upload(files[:cover_note], Article::COVER_NOTE_FILE_TAG) unless files[:cover_note].nil?
-    end
-
+  def create
+    data_files = assign_data_files(params[:article][:data_files])
     authors_ids = params[:article][:author_ids] << current_user.person.id
-
     censor = nil
-    invalid_article = false
+    invalid_review = false
     status = Article::STATUS_CREATED
-    if params[:article][:has_review] == '1'
-      if params[:article][:review]
-        data_files << DataFile.upload(params[:article][:review], Article::REVIEW_FILE_TAG)
-      else
-        invalid_article = true
-      end
-      censor =  Censor.create(params[:article][:censor_attributes])
-      status = Article::STATUS_REVIEWED
-    end
-
+    censor, invalid_review, status = assign_review(data_files) if params[:article][:has_review] == '1'
     @article = Article.new(title: params[:article][:title], data_files: data_files, author_ids: authors_ids, status: status)
     @article.censor = censor
-
     if @article.save
       redirect_to root_path
     else
-      @article.data_files.destroy_all
-      @article.censor.destroy if @article.censor
-      @article.censor = Censor.new if @article.censor.nil?
-      @article.errors.add(:review, 'attachment is missing.') if invalid_article
+      prepare_invalid(invalid_review: invalid_review)
       render :new
     end
   end
@@ -71,6 +49,32 @@ class ArticlesController < ApplicationController
   end
 
   private
+
+  def assign_data_files(files)
+    data_files = []
+    unless files.nil?
+      data_files << DataFile.upload(files[:article], Article::ARTICLE_FILE_TAG) unless files[:article].nil?
+      data_files << DataFile.upload(files[:resume_rus], Article::RESUME_RUS_FILE_TAG) unless files[:resume_rus].nil?
+      data_files << DataFile.upload(files[:resume_eng], Article::RESUME_ENG_FILE_TAG) unless files[:resume_eng].nil?
+      data_files << DataFile.upload(files[:cover_note], Article::COVER_NOTE_FILE_TAG) unless files[:cover_note].nil?
+    end
+    data_files
+  end
+
+  def assign_review(data_files)
+    invalid_review = params[:article][:review].nil?
+    data_files << DataFile.upload(params[:article][:review], Article::REVIEW_FILE_TAG) if params[:article][:review]
+    censor = Censor.create(params[:article][:censor_attributes])
+    status = Article::STATUS_REVIEWED
+    return censor, invalid_review, status
+  end
+
+  def prepare_invalid(params)
+    @article.data_files.destroy_all
+    @article.censor.destroy if @article.censor
+    @article.censor = Censor.new if @article.censor.nil?
+    @article.errors.add(:review, 'attachment is missing.') if params[:invalid_review]
+  end
 
   def initialize_assigns
     @article = Article.new
