@@ -18,19 +18,23 @@ class ArticlesController < ApplicationController
   end
 
   def create
-    data_files = assign_data_files(params[:article][:data_files])
-    authors_ids = params[:article][:author_ids] << current_user.person.id
-    censor = nil
-    invalid_review = false
-    status = Article::STATUS_CREATED
-    censor, invalid_review, status = assign_review(data_files) if params[:article][:has_review] == '1'
-    @article = Article.new(title: params[:article][:title], data_files: data_files, author_ids: authors_ids, status: status)
-    @article.censor = censor
-    if @article.save
-      redirect_to root_path
-    else
-      prepare_invalid(invalid_review: invalid_review)
-      render :new
+    begin
+      data_files = assign_data_files(params[:article][:data_files])
+      authors_ids = params[:article][:author_ids] << current_user.person.id
+      censor = nil
+      invalid_review = false
+      status = Article::STATUS_CREATED
+      censor, invalid_review, status = assign_review(data_files) if params[:article][:has_review] == '1'
+      @article = Article.new(title: params[:article][:title], data_files: data_files, author_ids: authors_ids, status: status)
+      @article.censor = censor
+      if @article.save
+        redirect_to root_path
+      else
+        render_if_invalid(invalid_review: invalid_review)
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      flash[:error] = e.message
+      render_if_invalid(invalid_review: invalid_review)
     end
   end
 
@@ -69,11 +73,12 @@ class ArticlesController < ApplicationController
     return censor, invalid_review, status
   end
 
-  def prepare_invalid(params)
+  def render_if_invalid(params)
     @article.data_files.destroy_all
     @article.censor.destroy if @article.censor
     @article.censor = Censor.new if @article.censor.nil?
     @article.errors.add(:review, 'attachment is missing.') if params[:invalid_review]
+    render :new
   end
 
   def initialize_assigns

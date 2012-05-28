@@ -204,6 +204,14 @@ describe ArticlesController do
       lambda { post :create, invalid_params }.should_not raise_exception
       sign_out user
     end
+
+    it 'fixed B11 - exception when add data_file with filename that already exists' do
+      user = create_user
+      sign_in user
+      post :create, full_params
+      lambda { post :create, full_params }.should_not raise_exception
+      sign_out user
+    end
   end
 
   describe '.index' do
