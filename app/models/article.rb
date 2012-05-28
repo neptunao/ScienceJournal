@@ -19,6 +19,7 @@ class Article < ActiveRecord::Base
   validates :article, :resume_rus, :resume_eng, :cover_note, presence: true
   validates :data_files, :length => { maximum: 5 }
   validates :authors, :length => { in: 1..11 }
+  validates_associated :censor  #TODO test
   after_save :after_save_action
 
   def article

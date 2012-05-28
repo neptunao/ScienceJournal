@@ -69,7 +69,6 @@ describe ArticlesController do
       author1 = FactoryGirl.create(:author)
       sign_in user
       get :new
-      puts Author.count
       assigns(:authors).should eql [author, author1]
       sign_out user
     end
@@ -194,6 +193,15 @@ describe ArticlesController do
       invalid_params[:article].delete(:data_files)
       post :create, invalid_params
       Censor.count.should be 0
+      sign_out user
+    end
+
+    it 'not throw exception when review without review file' do
+      user = create_user
+      sign_in user
+      invalid_params = full_params
+      invalid_params[:article].delete(:review)
+      lambda { post :create, invalid_params }.should_not raise_exception
       sign_out user
     end
   end

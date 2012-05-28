@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   before_filter :authenticate_user!
-  before_filter :initialize_assigns, only: [:create, :index]
+  before_filter :initialize_assigns, only: [:create, :index, :new]
   load_and_authorize_resource
 
   def index
@@ -30,15 +30,20 @@ class ArticlesController < ApplicationController
     authors_ids = params[:article][:author_ids] << current_user.person.id
 
     censor = nil
+    invalid_article = false
     status = Article::STATUS_CREATED
     if params[:article][:has_review] == '1'
-      data_files << DataFile.upload(params[:article][:review], Article::REVIEW_FILE_TAG)
+      if params[:article][:review]
+        data_files << DataFile.upload(params[:article][:review], Article::REVIEW_FILE_TAG)
+      else
+        invalid_article = true
+      end
       censor =  Censor.create(params[:article][:censor_attributes])
       status = Article::STATUS_REVIEWED
     end
 
     @article = Article.new(title: params[:article][:title], data_files: data_files, author_ids: authors_ids, status: status)
-    @article.censor_id = censor.id if censor
+    @article.censor = censor
 
     if @article.save
       redirect_to root_path
@@ -46,6 +51,7 @@ class ArticlesController < ApplicationController
       @article.data_files.destroy_all
       @article.censor.destroy if @article.censor
       @article.censor = Censor.new if @article.censor.nil?
+      @article.errors.add(:review, 'Missing review attachment.') if invalid_article
       render :new
     end
   end
@@ -70,6 +76,6 @@ class ArticlesController < ApplicationController
     @article = Article.new
     @article.censor = Censor.new
     @articles = Article.accessible_by(current_ability)  #TODO test
-    @authors = Author.select { |a| a.id != current_user.person.id }   #TODO test
+    @authors = Author.select { |a| a.id != current_user.person.id } if current_user.person   #TODO test
   end
 end
