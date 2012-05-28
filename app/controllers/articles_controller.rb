@@ -15,7 +15,6 @@ class ArticlesController < ApplicationController
     end
     @article = Article.new
     @article.censor = Censor.new
-    @authors = Author.select { |a| a.id != current_user.person.id }
   end
 
   def create  #TODO refactoring
@@ -71,5 +70,6 @@ class ArticlesController < ApplicationController
     @article = Article.new
     @article.censor = Censor.new
     @articles = Article.accessible_by(current_ability)  #TODO test
+    @authors = Author.select { |a| a.id != current_user.person.id }   #TODO test
   end
 end

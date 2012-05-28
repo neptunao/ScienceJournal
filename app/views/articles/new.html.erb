@@ -1,12 +1,12 @@
 <h1>New article</h1>
-<%= nested_form_for @article do |f| %>
+<%= form_for @article do |f| %>
     <%= render 'shared/errors_explanation', object: f.object %>
     <div>
       <%= f.label :title %>
       <%= f.text_field :title %>
     </div>
     <div>
-        <b>Coauthors:</b>
+        <b>Coauthors:</b> <br/>
         <%= f.select :author_ids, options_from_collection_for_select(@authors, 'id', 'fullname'),
                      {:include_blank => false}, { :multiple => true, :size => 10 }
           %>
