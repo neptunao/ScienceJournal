@@ -97,4 +97,12 @@ describe 'Abilities of' do
     @censor_user.is_approved = false
     censor_user_ability.should_not be_can(:read, article)
   end
+
+  it 'author can read only own articles' do
+    @author_user.person = FactoryGirl.create(:author)
+    article = Article.create(author_ids: [@author_user.person.id])
+    article1 = Article.new
+    author_user_ability.should be_can(:read, article)
+    author_user_ability.should_not be_can(:read, article1)
+  end
 end

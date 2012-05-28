@@ -4,16 +4,23 @@ class Ability
   def initialize(user)
     user ||= User.new
     can :read, Author
+
     if user.role? :admin
       can :manage, :all
     end
+
     if user.role? :author
-      unless user.person
-        can :create, Author
-      end
       can :update, user.person
       can :create, Article
+      if user.person
+        can :read, Article do |a|
+          a.author_ids.include? user.person_id
+        end
+      else
+          can :create, Author
+      end
     end
+
     if user.role?(:censor) && user.is_approved?
       can :read, Article, censor_id: user.person.id if user.person
     end

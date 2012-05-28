@@ -272,6 +272,18 @@ describe ArticlesController do
       assigns(:articles)[0].should eql @censor_article
       sign_out @censor_user
     end
+
+    it 'assigns user articles as @articles' do
+      user = create_user
+      sign_in user
+      article = create_article
+      article.author_ids = [user.person.id]
+      article.save!
+      get :index
+      assigns(:articles).should_not be_empty
+      assigns(:articles).should eql [article]
+      sign_out user
+    end
   end
 
   describe '.show' do

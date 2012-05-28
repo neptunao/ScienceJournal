@@ -84,7 +84,7 @@ class ArticlesController < ApplicationController
   def initialize_assigns
     @article = Article.new
     @article.censor = Censor.new
-    @articles = Article.accessible_by(current_ability)  #TODO test
+    @articles = Article.select {|a| can? :read, a } #TODO test
     @authors = Author.select { |a| a.id != current_user.person.id } if current_user.person   #TODO test
   end
 end
