@@ -16,6 +16,7 @@ describe ArticlesController do
     @resume_rus_file = fixture_file_upload('/test_data/test_pdf_file1.pdf')
     @resume_eng_file = fixture_file_upload('/test_data/test_pdf_file2.pdf')
     @cover_note_file = fixture_file_upload('/test_data/test_pdf_file3.pdf')
+    @review_file = fixture_file_upload('/test_data/test_pdf_file4.pdf')
   end
 
   after :all do
@@ -63,14 +64,17 @@ describe ArticlesController do
   end
 
   describe '.create' do
+    def full_params
+      { article: { title: 'test',
+                                       authors_attributes: { new_1338158908597: { first_name: 'a', middle_name: 'b', last_name: 'c', destroy: false} },
+                                       data_files: {
+                article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
+                                       has_review: '1', review: @review_file, censor_attributes: { first_name: 'a1', middle_name: 'a2' ,last_name: 'a3', degree: 'a4', post: 'a5' }
+            } }
+    end
+
     before :all do
       @min_params = { article: { title: 'test', data_files: {
-          article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
-                                 has_review: '0', censor_attributes: { first_name: '', last_name: '' }
-      } }
-      @full_params = { article: { title: 'test',
-                                 authors_attributes: { new_1338158908597: { first_name: 'a', middle_name: 'b', last_name: 'c', destroy: false} },
-                                 data_files: {
           article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
                                  has_review: '0', censor_attributes: { first_name: '', last_name: '' }
       } }
@@ -132,12 +136,10 @@ describe ArticlesController do
     it 'with coauthors' do
       user = create_user
       sign_in user
-      post :create, @full_params
+      post :create, full_params
       Article.last.authors.count.should be 2
-      Article.last.authors[1].should eql user.person
-      Article.last.authors[0].first_name.should eql 'a'
-      Article.last.authors[0].middle_name.should eql 'b'
-      Article.last.authors[0].last_name.should eql 'c'
+      Article.last.authors.any? { |a| a ==  user.person }.should be_true
+      Article.last.authors.any? { |a| a.first_name == 'a' && a.middle_name == 'b' && a.last_name == 'c' }.should be_true
       sign_out user
     end
 
@@ -145,10 +147,52 @@ describe ArticlesController do
       Author.destroy_all
       user = create_user
       sign_in user
-      invalid_params = @full_params
+      invalid_params = full_params
       invalid_params[:article].delete(:data_files)
-      post :create, @full_params
+      post :create, invalid_params
       Author.count.should be 0
+      sign_out user
+    end
+
+    it 'assign review file' do
+      Article.destroy_all
+      user = create_user
+      sign_in user
+      post :create, full_params
+      Article.last.review.filename.should eql 'data/test_pdf_file4.pdf'
+      sign_out user
+    end
+
+    it 'create and assign new censor' do
+      Article.destroy_all
+      user = create_user
+      sign_in user
+      post :create, full_params
+      Article.last.censor.first_name.should eql 'a1'
+      Article.last.censor.middle_name.should eql 'a2'
+      Article.last.censor.last_name.should eql 'a3'
+      Article.last.censor.degree.should eql 'a4'
+      Article.last.censor.post.should eql 'a5'
+      sign_out user
+    end
+
+    it 'change status when review attached' do
+      Article.destroy_all
+      user = create_user
+      sign_in user
+      post :create, full_params
+      Article.last.status.should be Article::STATUS_REVIEWED
+      sign_out user
+    end
+
+    it 'destroy censor if invalid' do
+      Censor.destroy_all
+      user = create_user
+      sign_in user
+      invalid_params = full_params
+      invalid_params[:article].delete(:data_files)
+      post :create, invalid_params
+      Censor.count.should be 0
       sign_out user
     end
   end

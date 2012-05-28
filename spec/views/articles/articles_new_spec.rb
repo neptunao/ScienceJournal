@@ -34,8 +34,8 @@ describe 'articles/new' do
   end
 
   it 'should render review' do
-    rendered.should have_selector 'input', name: 'has_review', type: 'hidden', value: '0'
-    rendered.should have_selector 'input', name: 'has_review'
+    rendered.should have_selector 'input', name: 'article[has_review]', type: 'hidden', value: '0'
+    rendered.should have_selector 'input', name: 'article[has_review]'
     rendered.should have_selector 'input', name: 'article[review]'
     rendered.should have_selector 'input', name: 'article[censor_attributes][degree]'
     rendered.should have_selector 'input', name: 'article[censor_attributes][post]'

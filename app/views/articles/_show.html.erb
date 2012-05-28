@@ -17,6 +17,9 @@
   <li><%= link_to 'Download russian resume', "#{root_url}#{@article.resume_rus.filename}" %></li>
   <li><%= link_to 'Download english resume', "#{root_url}#{@article.resume_eng.filename}" %></li>
   <li><%= link_to 'Download cover note', "#{root_url}#{@article.cover_note.filename}" %></li>
+  <% if @article.review  %>
+    <li><%= link_to 'Download review', "#{root_url}#{@article.review.filename}" %></li>
+  <% end %>
 </ul>
 <% if @article.censor %>
     <b>Censor:</b>

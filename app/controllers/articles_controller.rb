@@ -17,7 +17,7 @@ class ArticlesController < ApplicationController
     @article.censor = Censor.new
   end
 
-  def create
+  def create  #TODO refactoring
     files = params[:article][:data_files]
     data_files = []
     unless files.nil?
@@ -32,11 +32,23 @@ class ArticlesController < ApplicationController
         coauthors << Author.create(first_name: v[:first_name], middle_name: v[:middle_name], last_name: v[:last_name])
       end
     end
-    @article = Article.new(title: params[:article][:title], data_files: data_files, authors: coauthors << current_user.person)
+
+    censor = nil
+    status = Article::STATUS_CREATED
+    if params[:article][:has_review] == '1'
+      data_files << DataFile.upload(params[:article][:review], Article::REVIEW_FILE_TAG)
+      censor =  Censor.create(params[:article][:censor_attributes])
+      status = Article::STATUS_REVIEWED
+    end
+
+    @article = Article.new(title: params[:article][:title], data_files: data_files, authors: coauthors << current_user.person, status: status)
+    @article.censor_id = censor.id if censor
+
     if @article.save
       redirect_to root_path
     else
       @article.data_files.destroy_all
+      @article.censor.destroy if @article.censor
       coauthors.each { |a| a.destroy } unless coauthors.empty?
       @article.censor = Censor.new if @article.censor.nil?
       render :new
