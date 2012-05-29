@@ -39,10 +39,6 @@ resume_eng_file = DataFile.create(filename: '3test3', tag: Article::RESUME_ENG_F
 cover_note_file = DataFile.create(filename: '4test4', tag: Article::COVER_NOTE_FILE_TAG)
 data_files = [article_file, resume_rus_file, resume_eng_file, cover_note_file]
 
-#articles
-Article.create(title: 'test', data_files: data_files, author_ids: [author1.id])
-Article.create(title: 'test_reviewed', data_files: data_files, author_ids: [author1.id], status: Article::STATUS_REVIEWED)
-
 #Categories
 root = Category.create(title: 'root')
 child1 = Category.create(title: 'child1')
@@ -50,3 +46,7 @@ top1 = Category.create(title: 'top1')
 top2 = Category.create(title: 'top2')
 top1.children = [child1]
 root.children = [top1, top2]
+
+#articles
+Article.create(title: 'test', data_files: data_files, author_ids: [author1.id], category_id: root.id)
+Article.create(title: 'test_reviewed', data_files: data_files, author_ids: [author1.id], status: Article::STATUS_REVIEWED, category_id: child1.id)

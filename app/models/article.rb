@@ -9,10 +9,11 @@ class Article < ActiveRecord::Base
   STATUS_REVIEWED = 2
   STATUS_APPROVED = 3
 
-  attr_accessible :status, :title, :data_files, :author_ids, :censor_id
+  attr_accessible :status, :title, :data_files, :author_ids, :censor_id, :category_id
   has_many :data_files
   has_and_belongs_to_many :authors
   belongs_to :censor
+  belongs_to :category
   accepts_nested_attributes_for :authors
   accepts_nested_attributes_for :censor
   validates :title, :status, presence: true

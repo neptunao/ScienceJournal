@@ -17,6 +17,8 @@ describe ArticlesController do
     @resume_eng_file = fixture_file_upload('/test_data/test_pdf_file2.pdf')
     @cover_note_file = fixture_file_upload('/test_data/test_pdf_file3.pdf')
     @review_file = fixture_file_upload('/test_data/test_pdf_file4.pdf')
+
+    @category = Category.create(title: 'test1234')
   end
 
   after :all do
@@ -77,7 +79,7 @@ describe ArticlesController do
   describe '.create' do
     def full_params
       author = Author.create(first_name: 'a', middle_name: 'b', last_name: 'c')
-      { article: { title: 'test', author_ids: ['', author.id],
+      { article: { title: 'test', author_ids: ['', author.id], category_id: @category.id,
                                        data_files: {
                 article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
                                        has_review: '1', review: @review_file, censor_attributes: { first_name: 'a1', middle_name: 'a2' ,last_name: 'a3', degree: 'a4', post: 'a5' }
@@ -87,7 +89,7 @@ describe ArticlesController do
     before :all do
       @min_params = { article: { title: 'test', author_ids: [''], data_files: {
           article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
-                                 has_review: '0', censor_attributes: { first_name: '', last_name: '' }
+                                 category_id: @category.id, has_review: '0', censor_attributes: { first_name: '', last_name: '' }
       } }
     end
 
@@ -210,6 +212,14 @@ describe ArticlesController do
       sign_in user
       post :create, full_params
       lambda { post :create, full_params }.should_not raise_exception
+      sign_out user
+    end
+
+    it 'create article with category' do
+      user = create_user
+      sign_in user
+      post :create, @min_params
+      Article.last.category_id.should be @category.id
       sign_out user
     end
   end
