@@ -25,7 +25,7 @@ class ArticlesController < ApplicationController
       invalid_review = false
       status = Article::STATUS_CREATED
       censor, invalid_review, status = assign_review(data_files) if params[:article][:has_review] == '1'
-      @article = Article.new(title: params[:article][:title], data_files: data_files, author_ids: authors_ids, status: status)
+      @article = Article.new(title: params[:article][:title], data_files: data_files, author_ids: authors_ids, status: status, category_id: params[:article][:category_id])
       @article.censor = censor
       if @article.save
         redirect_to root_path
