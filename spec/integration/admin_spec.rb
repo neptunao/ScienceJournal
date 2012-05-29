@@ -11,6 +11,13 @@ describe 'Admin' do
     @users = [@user1, @user2, @user3]
     @admin = FactoryGirl.create(:admin_user)
   end
+
+  def create_article(params)
+    Article.create(title: 'test',
+                       data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                       author_ids: [FactoryGirl.create(:author).id], status: params[:status], category_id: FactoryGirl.create(:category).id)
+  end
+
   before :each do
     visit '/login'
     fill_in 'Email', with: @admin.email
@@ -53,10 +60,9 @@ describe 'Admin' do
   end
 
   it 'attach article to censor' do
+    Censor.destroy_all
     censor = FactoryGirl.create(:censor)
-    article = Article.create(title: 'test',
-                   data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                   author_ids: [FactoryGirl.create(:author).id])
+    article = create_article(status: Article::STATUS_CREATED)
     visit article_path(article)
     select censor.fullname, from: "article[censor_id]"
     click_button 'Update Article'
@@ -66,9 +72,7 @@ describe 'Admin' do
   end
 
   it 'approve reviewed article' do
-    article = Article.create(title: 'test',
-                   data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                   author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_REVIEWED)
+    article = create_article(status: Article::STATUS_REVIEWED)
     visit article_path(article)
     check 'article[status]'
     click_button 'Update Article'

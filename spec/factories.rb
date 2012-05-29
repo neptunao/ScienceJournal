@@ -80,4 +80,8 @@ FactoryGirl.define do
     censor.sequence(:degree) { |n| "degree#{n}" }
     censor.sequence(:post) { |n| "post#{n}" }
   end
+
+  factory :category do |category|
+    category.sequence(:title) { |n| "category#{n}" }
+  end
 end

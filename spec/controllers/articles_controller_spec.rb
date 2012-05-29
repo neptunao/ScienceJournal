@@ -21,9 +21,12 @@ describe ArticlesController do
     @category = Category.create(title: 'test1234')
   end
 
+  after :each do
+    DataFile.destroy_all
+  end
+
   after :all do
     User.destroy_all
-    DataFile.destroy_all
   end
 
   def create_user
