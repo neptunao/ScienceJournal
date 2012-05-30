@@ -68,6 +68,16 @@ FactoryGirl.define do
     tag Article::COVER_NOTE_FILE_TAG
   end
 
+  factory :cover_image, class: 'DataFile' do |file|
+      file.sequence(:filename) { |n| "cover_image_#{n}" }
+      tag Journal::COVER_IMAGE_FILE_TAG
+  end
+
+  factory :journal_file, class: 'DataFile' do |file|
+      file.sequence(:filename) { |n| "journal_file_#{n}" }
+      tag Journal::JOURNAL_FILE_TAG
+  end
+
   factory :author do |author|
     author.sequence(:first_name) { |n| "first_name_#{n}"}
     author.middle_name 'middle_name'

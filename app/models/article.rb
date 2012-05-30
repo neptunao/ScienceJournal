@@ -46,6 +46,6 @@ class Article < ActiveRecord::Base
   private
 
   def after_save_action
-    DataFile.where(article_id: nil).destroy_all
+    DataFile.destroy_unowned
   end
 end
