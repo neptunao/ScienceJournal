@@ -83,10 +83,57 @@ describe JournalsController do
         assigns(:articles).count.should be 1
         assigns(:articles)[0].should eql a2
       end
+
       it 'response with js' do
         get :new, format: :js
         response.should be_success
       end
+    end
+  end
+
+  describe '.create' do
+    before :all do
+      DataFile.destroy_all
+      Article.destroy_all
+      Category.destroy_all
+      @journal_file = fixture_file_upload('/test_data/test_pdf_file.pdf')
+    end
+
+    before :each do
+      @article = create_article
+      @category = FactoryGirl.create(:category)
+      sign_in @admin_user
+    end
+
+    after :each do
+      sign_out @admin_user
+    end
+
+    def min_params
+      { journal: { name: 'a', num: '2', category_id: @category.id, article_ids: [@article.id], journal_file: @journal_file } }
+    end
+
+    it 'journal' do
+      expect { post :create, min_params }.to change(Journal, :count).by 1
+    end
+
+    it 'redirect to root if success' do
+      post :create, min_params
+      response.should redirect_to root_path
+    end
+
+    it 'render new if invalid' do
+      invalid_params = min_params
+      invalid_params[:journal].delete(:journal_file)
+      post :create, invalid_params
+      response.should render_template 'journals/new'
+    end
+
+    it 'destroy data_files if invalid' do
+      invalid_params = min_params
+      invalid_params[:journal].delete(:journal_file)
+      post :create, invalid_params
+      DataFile.count.should be 4
     end
   end
 end
