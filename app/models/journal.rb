@@ -3,11 +3,13 @@ class Journal < ActiveRecord::Base
   JOURNAL_FILE_TAG = 'journal'
 
   attr_accessible :category_id, :name, :num, :category_id, :data_files
-  has_many :data_files
+  has_many :data_files, dependent: :destroy
+  has_many :articles
   belongs_to :category
   validates :name, :num, :category, :journal_file, presence: true
   validates :num, inclusion: { in: 1..Float::INFINITY }
   validates :data_files, length: { maximum: 2 }
+  validates :articles, length: { minimum: 1 }
   after_save :after_save_action
 
   def journal_file

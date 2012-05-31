@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120530104936) do
+ActiveRecord::Schema.define(:version => 20120530143917) do
 
   create_table "articles", :force => true do |t|
     t.string   "title"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20120530104936) do
     t.datetime "updated_at",                 :null => false
     t.integer  "censor_id"
     t.integer  "category_id"
+    t.integer  "journal_id"
   end
 
   create_table "articles_authors", :id => false, :force => true do |t|
@@ -58,8 +59,8 @@ ActiveRecord::Schema.define(:version => 20120530104936) do
     t.string   "filename"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
-    t.string   "tag"
     t.integer  "article_id"
+    t.string   "tag"
     t.integer  "journal_id"
   end
 

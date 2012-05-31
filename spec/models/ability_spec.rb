@@ -14,6 +14,7 @@ describe 'Abilities of' do
   end
 
   before :all do
+    DataFile.destroy_all
     User.destroy_all
     load "#{Rails.root}/db/seeds.rb"
     @guest_user = FactoryGirl.build(:guest_user)

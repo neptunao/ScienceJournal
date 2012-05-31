@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe ArticlesController do
   before :all do
+    DataFile.destroy_all
     User.destroy_all
     load "#{Rails.root}/db/seeds.rb"
     @author_user = FactoryGirl.create(:user)

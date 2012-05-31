@@ -11,9 +11,7 @@
     </div>
     <div>
         <b>Coauthors:</b> <br/>
-        <%= f.select :author_ids, options_from_collection_for_select(@authors, 'id', 'fullname'),
-                     {:include_blank => false}, { :multiple => true, :size => 10 }
-          %>
+        <%= f.select :author_ids, options_from_collection_for_select(@authors, 'id', 'fullname'), {include_blank: false}, { multiple: true, size: 10 } %>
     </div>
     <div>
       <%= f.label :article %>

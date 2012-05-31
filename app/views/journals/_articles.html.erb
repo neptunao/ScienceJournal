@@ -1,0 +1,2 @@
+Articles: <br/>
+<%= collection_select @journal, :articles_all, @articles, :id, :title, { include_blank: false }, { id: 'available_articles', name: 'articles_all', multiple: true } %>

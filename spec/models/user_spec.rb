@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe User do
   before :each do
+    DataFile.destroy_all
     load "#{Rails.root}/db/seeds.rb"
   end
 

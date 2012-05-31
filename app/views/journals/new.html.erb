@@ -1,0 +1,22 @@
+<h1>New journal</h1>
+<%= form_for @journal do |f| %>
+    <div>
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div>
+      <% f.label :category %>
+      <%= f.collection_select :category_id, Category.all, :id, :title, { }, data: { remote: true, url: new_journal_path } %>
+    </div>
+    <div>
+      <div id='articles' >
+        <%= render 'articles'%>
+      </div>
+      <%= button_tag '>', { type: 'button', onclick: "appendOne('available_articles','selected_articles');return false;" } %>
+      <%= button_tag '<',  { type: 'button', onclick: "appendOne('selected_articles','available_articles');return false;" } %>
+      <%= f.select :article_ids, [], {}, { id: 'selected_articles', multiple: true } %>
+    </div>
+    <div>
+      <%= f.submit %>
+    </div>
+<% end %>

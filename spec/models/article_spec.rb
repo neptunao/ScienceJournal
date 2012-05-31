@@ -67,10 +67,9 @@ describe Article do
   it 'destroy old data_files before save' do
     DataFile.destroy_all
     article = Article.new(title: 'test', author_ids: [FactoryGirl.create(:author).id])
-    article.data_files = [DataFile.create(filename: 'test1')]
+    article.data_files = [DataFile.create(filename: 'test1'), DataFile.create(filename: 'test2')]
     article.data_files = create_data_files
-    article.data_files.count.should be 6
-    article.save
+    article.save!
     article.data_files.count.should be 5
     DataFile.count.should be 5
   end
@@ -96,6 +95,14 @@ describe Article do
     article.should be_valid
     article.authors = fill_with(times_count: 11, object: :author)
     article.should be_valid
+  end
+
+  it 'destroy data files when destroy' do
+    DataFile.destroy_all
+    article = create_valid_article
+    DataFile.count.should be > 0
+    article.destroy
+    DataFile.count.should be 0
   end
 
   def fill_with(params)
