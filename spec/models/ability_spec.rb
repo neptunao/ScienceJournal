@@ -106,4 +106,10 @@ describe 'Abilities of' do
     author_user_ability.should be_can(:read, article)
     author_user_ability.should_not be_can(:read, article1)
   end
+
+  it 'only admin can create journals' do
+    guest_user_ability.should_not be_can(:create, Journal)
+    author_user_ability.should_not be_can(:create, Journal)
+    censor_user_ability.should_not be_can(:create, Journal)
+  end
 end

@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe JournalsController do
   before :all do
+    User.destroy_all
+
+    @author_user = FactoryGirl.create(:user)
+    @censor_user = FactoryGirl.create(:censor_user)
+    @users = [@author_user, @censor_user]
+    @admin_user = FactoryGirl.create(:admin_user)
+
     article_file = DataFile.create(filename: '1test1', tag: Article::ARTICLE_FILE_TAG)
     resume_rus_file = DataFile.create(filename: '2test2', tag: Article::RESUME_RUS_FILE_TAG)
     resume_eng_file = DataFile.create(filename: '3test3', tag: Article::RESUME_ENG_FILE_TAG)
@@ -22,40 +29,64 @@ describe JournalsController do
   end
 
   describe '.new' do
-    it 'assign new journal' do
-      get :new
-      assigns(:journal).should be_a_new(Journal)
+    describe 'access' do
+      it 'redirect to login if guest' do
+        get :new
+        response.should redirect_to new_user_session_path
+      end
+
+      it 'redirect to root if not admin' do
+        sign_in @author_user
+        get :new
+        response.should redirect_to root_path
+        sign_out @author_user
+      end
     end
 
-    it 'assign categories' do
-      2.times { FactoryGirl.create(:category) }
-      get :new
-      assigns(:categories).should_not be_nil
-      assigns(:categories).should =~ Category.all
-    end
+    describe 'work' do
+      before :each do
+        sign_in @admin_user
+      end
 
-    it 'assign approved articles' do
-      get :new
-      a = create_article
-      a.update_attribute(:status, Article::STATUS_APPROVED)
-      create_article
-      assigns(:articles).count.should be 1
-      assigns(:articles)[0].should eql a
-    end
+      after :each do
+        sign_out @admin_user
+      end
 
-    it 'assign articles with category_id' do
-      a1 = create_article
-      a2 = create_article
-      category_id = FactoryGirl.create(:category).id
-      a1.update_attribute(:category_id, FactoryGirl.create(:category).id)
-      a2.update_attribute(:category_id, category_id)
-      get :new, journal: { category_id: category_id }
-      assigns(:articles).count.should be 1
-      assigns(:articles)[0].should eql a2
-    end
-    it 'response with js' do
-      get :new, format: :js
-      response.should be_success
+      it 'assign new journal' do
+        get :new
+        assigns(:journal).should be_a_new(Journal)
+      end
+
+      it 'assign categories' do
+        2.times { FactoryGirl.create(:category) }
+        get :new
+        assigns(:categories).should_not be_nil
+        assigns(:categories).should =~ Category.all
+      end
+
+      it 'assign approved articles' do
+        get :new
+        a = create_article
+        a.update_attribute(:status, Article::STATUS_APPROVED)
+        create_article
+        assigns(:articles).count.should be 1
+        assigns(:articles)[0].should eql a
+      end
+
+      it 'assign articles with category_id' do
+        a1 = create_article
+        a2 = create_article
+        category_id = FactoryGirl.create(:category).id
+        a1.update_attribute(:category_id, FactoryGirl.create(:category).id)
+        a2.update_attribute(:category_id, category_id)
+        get :new, journal: { category_id: category_id }
+        assigns(:articles).count.should be 1
+        assigns(:articles)[0].should eql a2
+      end
+      it 'response with js' do
+        get :new, format: :js
+        response.should be_success
+      end
     end
   end
 end
