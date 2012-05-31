@@ -16,8 +16,8 @@
       <div id='articles' >
         <%= render 'articles'%>
       </div>
-      <%= button_tag '>', { type: 'button', onclick: "appendOne('available_articles','selected_articles');return false;" } %>
-      <%= button_tag '<',  { type: 'button', onclick: "appendOne('selected_articles','available_articles');return false;" } %>
+      <%= button_tag '>', { type: 'button', onclick: "appendAndSelectAll('available_articles','selected_articles', 'selected_articles'); return false;" } %>
+      <%= button_tag '<',  { type: 'button', onclick: "appendAndSelectAll('selected_articles','available_articles', 'selected_articles'); return false;" } %>
       <%= f.select :article_ids, [], {}, { id: 'selected_articles', multiple: true } %>
     </div>
     <div>

@@ -8,3 +8,11 @@ function appendOne(to,from) {   //TODO test
     box2.options[box2.options.length] = new Option(text_box1, val_box1, false, false);
     box1.options[box1.selectedIndex] = null;
 }
+
+function appendAndSelectAll(to, from, to_select) {
+    appendOne(to, from)
+    select = document.getElementById(to_select);
+    for(i=0; i < select.options.length; i++) {
+        select.options[i].selected = true;
+    }
+}
