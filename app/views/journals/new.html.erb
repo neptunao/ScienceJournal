@@ -11,15 +11,19 @@
     </div>
     <div>
       <%= f.label :category %>
-      <%= f.collection_select :category_id, Category.all, :id, :title, { }, data: { remote: true, url: new_journal_path } %>
+      <%= f.collection_select :category_id, Category.all, :id, :title, { },
+                              { onchange: "clear_select('selected_articles');", data: { remote: true, url: new_journal_path } } %>
     </div>
-    <div>
-      <div id='articles' >
-        <%= render 'articles'%>
-      </div>
-      <%= button_tag '>', { type: 'button', onclick: "appendAndSelectAll('available_articles','selected_articles', 'selected_articles'); return false;" } %>
+    <div id='articles' class="vertical_centered" >
+      <%= render 'articles'%>
+    </div>
+    <div class="vertical_centered">
+      <%= button_tag '>', { type: 'button', onclick: "appendAndSelectAll('available_articles','selected_articles', 'selected_articles'); return false;" } %> <br/>
       <%= button_tag '<',  { type: 'button', onclick: "appendAndSelectAll('selected_articles','available_articles', 'selected_articles'); return false;" } %>
-      <%= f.select :article_ids, [], {}, { id: 'selected_articles', multiple: true } %>
+    </div>
+    <div class="vertical_centered">
+      Journal articles: <br/>
+      <%= f.select :article_ids, [], {}, { id: 'selected_articles', multiple: true } %> <br/>
     </div>
     <div>
       <%= f.label :journal_file, 'PDF file:' %>
