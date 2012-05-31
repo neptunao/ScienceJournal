@@ -12,17 +12,25 @@ class JournalsController < ApplicationController
 
   def create
     j_params = params[:journal]
-    if params[:journal][:journal_file]
-      data_files = [DataFile.upload(params[:journal][:journal_file], Journal::JOURNAL_FILE_TAG)]
-      j_params = params[:journal].merge({ data_files: data_files })
-      j_params.delete(:journal_file)
-    end
+    data_files = []
+    add_file_and_delete_param(files: data_files, params_hash: j_params, key: :journal_file, tag: Journal::JOURNAL_FILE_TAG)
+    add_file_and_delete_param(files: data_files, params_hash: j_params, key: :cover_image, tag: Journal::COVER_IMAGE_FILE_TAG)
+    j_params = j_params.merge({ data_files: data_files })
     @journal = Journal.new(j_params)
     if @journal.save
       redirect_to root_path
     else
       @journal.destroy
       render :new
+    end
+  end
+
+  def add_file_and_delete_param(params)
+    hash = params[:params_hash]
+    key = params[:key]
+    if hash[key]
+      params[:files] << DataFile.upload(hash[key], params[:tag])
+      hash.delete(key)
     end
   end
 

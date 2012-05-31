@@ -22,6 +22,10 @@ describe JournalsController do
     DataFile.destroy_all
   end
 
+  after :each do
+    DataFile.destroy_all
+  end
+
   def create_article
     Article.create!(title: 'test',
                    data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
@@ -97,6 +101,7 @@ describe JournalsController do
       Article.destroy_all
       Category.destroy_all
       @journal_file = fixture_file_upload('/test_data/test_pdf_file.pdf')
+      @image_file = fixture_file_upload('/test_data/test_image.jpg')
     end
 
     before :each do
@@ -107,6 +112,11 @@ describe JournalsController do
 
     after :each do
       sign_out @admin_user
+    end
+
+    def full_params
+      { journal: { name: 'a', num: '2', category_id: @category.id, article_ids: [@article.id],
+                   journal_file: @journal_file, cover_image: @image_file } }
     end
 
     def min_params
@@ -134,6 +144,15 @@ describe JournalsController do
       invalid_params[:journal].delete(:journal_file)
       post :create, invalid_params
       DataFile.count.should be 4
+    end
+
+    it 'journal with full_params' do
+      expect { post :create, full_params }.to change(Journal, :count).by 1
+    end
+
+    it 'cover image file' do
+      post :create, full_params
+      Journal.last.cover_image.should_not be_nil
     end
   end
 end
