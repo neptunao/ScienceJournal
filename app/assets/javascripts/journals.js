@@ -16,3 +16,8 @@ function appendAndSelectAll(to, from, to_select) {
         select.options[i].selected = true;
     }
 }
+
+function clear_select(select_id) {
+    select = document.getElementById(select_id);
+    select.options.length = 0;
+}
