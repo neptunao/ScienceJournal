@@ -1,0 +1,16 @@
+<p class="hello-message">Totally
+  <%= Journal.count %>
+  Journals with
+  <%= @articles.count %>
+  Articles in database
+</p>
+<div class="center">
+  <p class="message">Last journals:</p>
+  <ul class="unstyled">
+    <% @journals.each do |journal| %>
+        <li class="clear">
+          <%= render 'journals/journal', journal: journal, link: true %>
+        </li>
+    <% end %>
+  </ul>
+</div>

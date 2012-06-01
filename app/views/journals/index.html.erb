@@ -1,7 +1,12 @@
-<ol>
-  <% @journals.each do |journal| %>
-      <li class="clear">
-        <%= render 'journal', journal: journal, link: true %>
-      </li>
-  <% end %>
-</ol>
+<% if @journals.empty? %>
+    There is no journals for you request.
+<% else %>
+    <h1>Journals</h1>
+    <ul class="unstyled">
+      <% @journals.each do |journal| %>
+          <li class="clear">
+            <%= render 'journal', journal: journal, link: true %>
+          </li>
+      <% end %>
+    </ul>
+<% end %>

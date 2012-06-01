@@ -20,6 +20,16 @@ describe PagesController do
       get 'home'
       response.should have_selector('a', href: '/', content: 'Home')
     end
+
+    it 'assigns last entries' do
+      journals = []
+      10.times { journals << create_journal }
+      get 'home'
+      expected = journals.last(5).reverse
+      assigns(:journals).each_with_index do |j, i|
+        j.should eql expected[i]
+      end
+    end
   end
 
 end

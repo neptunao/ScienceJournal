@@ -50,14 +50,14 @@ root.children = [top1, top2]
 Category.rebuild!
 
 #articles
-ar = Article.create!(title: 'Coding at machine lerning', data_files: data_files, author_ids: [author1.id], category_id: root.id, status: Article::STATUS_APPROVED)
+ar = Article.create!(title: 'Coding at machine learning', data_files: data_files, author_ids: [author1.id], category_id: root.id, status: Article::STATUS_APPROVED)
 ar1 = Article.new(title: 'Chemistry at coding', author_ids: [author1.id, author2.id, author3.id], status: Article::STATUS_APPROVED, category_id: child1.id)
 ar1.update_attribute(:data_files, [DataFile.create(filename: '11test11', tag: Article::ARTICLE_FILE_TAG),
                                    DataFile.create(filename: '21test12', tag: Article::RESUME_RUS_FILE_TAG),
                                    DataFile.create(filename: '31test13', tag: Article::RESUME_ENG_FILE_TAG),
                                    DataFile.create(filename: '41test14', tag: Article::COVER_NOTE_FILE_TAG)])
 ar1.save!
-ar2 = Article.new(title: 'Coding and refatoring', author_ids: [author2.id, author3.id], status: Article::STATUS_CREATED, category_id: child1.id)
+ar2 = Article.new(title: 'Coding and refactoring', author_ids: [author2.id, author3.id], status: Article::STATUS_CREATED, category_id: child1.id)
 ar2.update_attribute(:data_files, [DataFile.create(filename: '111test11', tag: Article::ARTICLE_FILE_TAG),
                                    DataFile.create(filename: '211test12', tag: Article::RESUME_RUS_FILE_TAG),
                                    DataFile.create(filename: '311test13', tag: Article::RESUME_ENG_FILE_TAG),
@@ -65,7 +65,20 @@ ar2.update_attribute(:data_files, [DataFile.create(filename: '111test11', tag: A
 ar2.save!
 
 #journals
-Journal.create(name: 'Data Mining chemistry', num: 1, category_id: root.id, article_ids: [ar.id, ar1.id],
-               data_files: [DataFile.create(filename: '22test22', tag: Journal::JOURNAL_FILE_TAG)])
-Journal.create(name: 'Data Mining chemistry', num: 2, category_id: root.id, article_ids: [ar.id, ar1.id],
-               data_files: [DataFile.create(filename: '33test33', tag: Journal::JOURNAL_FILE_TAG)])
+Journal.create!(name: 'Data Mining chemistry', num: 1, category_id: root.id, article_ids: [ar.id, ar1.id],
+                data_files: [DataFile.create(filename: '212test232', tag: Journal::JOURNAL_FILE_TAG)])
+Journal.create!(name: 'Data Mining chemistry', num: 2, category_id: root.id, article_ids: [ar.id, ar1.id],
+                data_files: [DataFile.create(filename: '212test22', tag: Journal::JOURNAL_FILE_TAG),
+                             DataFile.create(filename: 'data/seed_cover2.jpg', tag: Journal::COVER_IMAGE_FILE_TAG)])
+Journal.create!(name: 'Data Mining coding', num: 1, category_id: child1.id, article_ids: [ar.id, ar1.id],
+                data_files: [DataFile.create(filename: '222test22', tag: Journal::JOURNAL_FILE_TAG),
+                             DataFile.create(filename: 'data/seed_cover3.jpg', tag: Journal::COVER_IMAGE_FILE_TAG)])
+Journal.create!(name: 'Data Mining coding', num: 2, category_id: child1.id, article_ids: [ar.id, ar1.id],
+                data_files: [DataFile.create(filename: '223test22', tag: Journal::JOURNAL_FILE_TAG),
+                             DataFile.create(filename: 'data/seed_cover4.jpg', tag: Journal::COVER_IMAGE_FILE_TAG)])
+Journal.create!(name: 'Data Mining coding', num: 3, category_id: child1.id, article_ids: [ar.id, ar1.id],
+                data_files: [DataFile.create(filename: '224test22', tag: Journal::JOURNAL_FILE_TAG),
+                             DataFile.create(filename: 'data/seed_cover5.png', tag: Journal::COVER_IMAGE_FILE_TAG)])
+Journal.create!(name: 'Coding at chemistry', num: 1, category_id: top2.id, article_ids: [ar.id, ar1.id],
+                data_files: [DataFile.create(filename: '22test22', tag: Journal::JOURNAL_FILE_TAG),
+                             DataFile.create(filename: 'data/seed_cover1.jpg', tag: Journal::COVER_IMAGE_FILE_TAG)])
