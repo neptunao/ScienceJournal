@@ -10,10 +10,12 @@
   color: #da4e49;
 }
 
-.vertical_top {
-  vertical-align: top;
-}
-
 .cover {
   float: left;
+  padding-bottom: 10px;
+  padding-right: 5px;
+}
+
+.clear {
+  clear: both;
 }
