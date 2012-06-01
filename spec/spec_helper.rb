@@ -34,3 +34,31 @@ end
 
 Spork.each_run do
 end
+
+def create_journal
+  j = Journal.new(name: 'a', num: 1, category_id: FactoryGirl.create(:category).id)
+  j.update_attribute(:data_files, [FactoryGirl.create(:journal_file)])
+  j.update_attribute(:articles, [create_article])
+  j
+end
+
+def create_article
+  Article.create!(title: 'test',
+                 data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                 author_ids: [FactoryGirl.create(:author).id], category_id: FactoryGirl.create(:category).id)
+end
+
+def create_data_files
+  f1 = DataFile.create(filename: '0', tag: Article::ARTICLE_FILE_TAG)
+  f2 = DataFile.create(filename: '1', tag: Article::RESUME_RUS_FILE_TAG)
+  f3 = DataFile.create(filename: '2', tag: Article::RESUME_ENG_FILE_TAG)
+  f4 = DataFile.create(filename: '3', tag: Article::COVER_NOTE_FILE_TAG)
+  f5 = DataFile.create(filename: '4', tag: Article::REVIEW_FILE_TAG)
+  [f2, f3, f1, f4, f5]
+end
+
+def create_user
+  user = FactoryGirl.create(:user)
+  user.update_attribute(:person, FactoryGirl.create(:author))
+  user
+end

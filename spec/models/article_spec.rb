@@ -7,21 +7,6 @@ describe Article do
     DataFile.destroy_all
   end
 
-  def create_data_files
-    f1 = DataFile.create(filename: '0', tag: Article::ARTICLE_FILE_TAG)
-    f2 = DataFile.create(filename: '1', tag: Article::RESUME_RUS_FILE_TAG)
-    f3 = DataFile.create(filename: '2', tag: Article::RESUME_ENG_FILE_TAG)
-    f4 = DataFile.create(filename: '3', tag: Article::COVER_NOTE_FILE_TAG)
-    f5 = DataFile.create(filename: '4', tag: Article::REVIEW_FILE_TAG)
-    [f2, f3, f1, f4, f5]
-  end
-
-  def create_valid_article
-    article = Article.new(title: 'test', author_ids: [FactoryGirl.create(:author).id])
-    article.data_files = create_data_files
-    article
-  end
-
   it 'should have title' do
     Article.new(title: '').should_not be_valid
   end
@@ -31,25 +16,25 @@ describe Article do
   end
 
   it 'should have article data_file' do
-    article = create_valid_article
+    article = create_article
     article.data_files.destroy(article.article.id)
     article.should_not be_valid
   end
 
   it 'should have resume_rus data_file' do
-    article = create_valid_article
+    article = create_article
     article.data_files.destroy(article.resume_rus.id)
     article.should_not be_valid
   end
 
   it 'should have resume_eng data_file' do
-    article = create_valid_article
+    article = create_article
     article.data_files.destroy(article.resume_eng.id)
     article.should_not be_valid
   end
 
   it 'should have cover_note data_file' do
-    article = create_valid_article
+    article = create_article
     article.data_files.destroy(article.cover_note.id)
     article.should_not be_valid
   end
@@ -59,8 +44,10 @@ describe Article do
   end
 
   it 'datafiles num should be valid' do
-    article = create_valid_article
+    article = create_article
     article.data_files << DataFile.create(filename: 'test')
+    article.data_files << DataFile.create(filename: 'test1')
+    article.data_files.count.should be 6
     article.should_not be_valid
   end
 
@@ -75,7 +62,7 @@ describe Article do
   end
 
   it 'data_files accessor test' do
-    article = create_valid_article
+    article = create_article
     article.article.should eql article.data_files.find_by_tag(Article::ARTICLE_FILE_TAG)
     article.resume_rus.should eql article.data_files.find_by_tag(Article::RESUME_RUS_FILE_TAG)
     article.resume_eng.should eql article.data_files.find_by_tag(Article::RESUME_ENG_FILE_TAG)
@@ -84,7 +71,7 @@ describe Article do
   end
 
   it 'should has 1..11 authors' do
-    article = create_valid_article
+    article = create_article
     article.update_attribute(:authors, [])
     article.should_not be_valid
     authors = []
@@ -99,7 +86,7 @@ describe Article do
 
   it 'destroy data files when destroy' do
     DataFile.destroy_all
-    article = create_valid_article
+    article = create_article
     DataFile.count.should be > 0
     article.destroy
     DataFile.count.should be 0

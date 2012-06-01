@@ -20,4 +20,7 @@ describe "Journals routing" do
   it 'routes to destroy' do
     { delete: '/journals/1' }.should route_to controller: 'journals', action: 'destroy', id: '1'
   end
+  it 'routes to nested article' do
+    { get: '/journals/1/articles/1' }.should route_to controller: 'articles', action: 'show', journal_id: '1', id: '1'
+  end
 end

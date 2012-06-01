@@ -118,4 +118,16 @@ describe 'Abilities of' do
     author_user_ability.should be_can(:read, Journal)
     censor_user_ability.should be_can(:read, Journal)
   end
+
+  it 'all can read approved articles' do
+    a2 = create_article
+    a2.update_attribute(:status, Article::STATUS_APPROVED)
+    guest_user_ability.should be_can(:read, a2)
+    author_user_ability.should be_can(:read, a2)
+    censor_user_ability.should be_can(:read, a2)
+  end
+
+  it 'guest cant read unapproved articles' do
+    guest_user_ability.should_not be_can(:read, create_article)
+  end
 end

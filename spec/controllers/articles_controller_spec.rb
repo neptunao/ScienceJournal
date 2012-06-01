@@ -30,18 +30,6 @@ describe ArticlesController do
     User.destroy_all
   end
 
-  def create_user
-    user = FactoryGirl.create(:user)
-    user.update_attribute(:person, FactoryGirl.create(:author))
-    user
-  end
-
-  def create_article
-    Article.create(title: 'test',
-                   data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                   author_ids: [FactoryGirl.create(:author).id])
-  end
-
   describe '.new' do
     it 'redirect to login if guest' do
       get :new
@@ -242,15 +230,6 @@ describe ArticlesController do
       @censor_article = Article.create(title: 'test',
                          data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
                          author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_TO_REVIEW, censor_id: @censor_user.person.id)
-    end
-
-    it 'redirect to root if not admin' do
-      @users.each do |user|
-        sign_in user
-        get :index
-        response.should redirect_to root_path
-        sign_out user
-      end
     end
 
     it 'assigns articles without review as @articles' do

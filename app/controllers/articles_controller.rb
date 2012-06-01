@@ -1,5 +1,5 @@
 class ArticlesController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except: [:show, :index]
   before_filter :initialize_assigns, only: [:create, :index, :new]
   load_and_authorize_resource
 
@@ -85,6 +85,6 @@ class ArticlesController < ApplicationController
     @article = Article.new
     @article.censor = Censor.new
     @articles = Article.select {|a| can? :read, a } #TODO test
-    @authors = Author.select { |a| a.id != current_user.person.id } if current_user.person   #TODO test
+    @authors = Author.select { |a| a.id != current_user.person.id } if current_user && current_user.person   #TODO test
   end
 end
