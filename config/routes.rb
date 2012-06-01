@@ -5,6 +5,11 @@ ScienceJournal::Application.routes.draw do
   resources :journals do
     resources :articles, only: [:show]
   end
+  resources :categories do
+    collection do
+      post :rebuild
+    end
+  end
 
   devise_for :users
   devise_scope :user do

@@ -1,0 +1,7 @@
+- title     = node.send opts[:title]
+- handle    = content_tag :i, '', :class => :handle
+- link      = link_to node.send(opts[:title]), journals_path(category_id: node.id)
+- controls  = render(:partial  =>  "#{opts[:path]}/controls", :locals  =>  { :node => node, :opts => opts })
+- controls  = content_tag(:b, controls, :class => :controls)
+- element   = handle + controls + link
+%div{ :class => "link#{' root' if root}" }= element

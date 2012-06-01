@@ -10,12 +10,6 @@ describe 'Autorization' do
     @admin = FactoryGirl.create(:admin_user)
   end
 
-  def login(user)
-    visit '/login'
-    fill_in 'Email', with: user.email
-    fill_in 'Password', with: user.password
-    click_button 'Sign in'
-  end
   it 'change sign in link to sign out' do
     login @user
     response.should_not have_selector 'a', href: '/login', content: 'Sign in'

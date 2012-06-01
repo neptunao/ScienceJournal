@@ -168,6 +168,15 @@ describe JournalsController do
         assigns(:journals).count.should be 2
         assigns(:journals).should =~ Journal.all
       end
+
+      it 'assign categorized journals' do
+        category = FactoryGirl.create(:category)
+        create_journal
+        j = create_journal
+        j.update_attribute(:category_id, category.id)
+        get :index, category_id: category.id
+        assigns(:journals).should =~ [j]
+      end
     end
   end
 

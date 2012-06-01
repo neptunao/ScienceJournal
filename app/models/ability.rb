@@ -5,6 +5,7 @@ class Ability
     user ||= User.new
     can :read, Author
     can :read, Journal
+    can :read, Category
     can :read, Article, status: Article::STATUS_APPROVED
 
     if user.role? :admin

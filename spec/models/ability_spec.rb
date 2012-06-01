@@ -130,4 +130,28 @@ describe 'Abilities of' do
   it 'guest cant read unapproved articles' do
     guest_user_ability.should_not be_can(:read, create_article)
   end
+
+  it 'all can read categories' do
+    guest_user_ability.should be_can(:read, Category)
+    author_user_ability.should be_can(:read, Category)
+    censor_user_ability.should be_can(:read, Category)
+  end
+
+  it 'only admin can create category' do
+    guest_user_ability.should_not be_can(:create, Category)
+    author_user_ability.should_not be_can(:create, Category)
+    censor_user_ability.should_not be_can(:create, Category)
+  end
+
+  it 'only admin can update category' do
+    guest_user_ability.should_not be_can(:update, Category)
+    author_user_ability.should_not be_can(:update, Category)
+    censor_user_ability.should_not be_can(:update, Category)
+  end
+
+  it 'only admin can destroy category' do
+    guest_user_ability.should_not be_can(:destroy, Category)
+    author_user_ability.should_not be_can(:destroy, Category)
+    censor_user_ability.should_not be_can(:destroy, Category)
+  end
 end

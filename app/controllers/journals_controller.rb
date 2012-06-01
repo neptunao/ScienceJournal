@@ -11,6 +11,7 @@ class JournalsController < ApplicationController
   end
 
   def index
+    @journals = Journal.where(category_id: params[:category_id]) if params[:category_id]
   end
 
   def show
