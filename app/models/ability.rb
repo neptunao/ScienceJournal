@@ -4,6 +4,7 @@ class Ability
   def initialize(user)
     user ||= User.new
     can :read, Author
+    can :read, Journal
 
     if user.role? :admin
       can :manage, :all

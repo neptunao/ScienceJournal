@@ -112,4 +112,10 @@ describe 'Abilities of' do
     author_user_ability.should_not be_can(:create, Journal)
     censor_user_ability.should_not be_can(:create, Journal)
   end
+
+  it 'all can read journals' do
+    guest_user_ability.should be_can(:read, Journal)
+    author_user_ability.should be_can(:read, Journal)
+    censor_user_ability.should be_can(:read, Journal)
+  end
 end

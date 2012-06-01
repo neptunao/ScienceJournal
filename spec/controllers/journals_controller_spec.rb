@@ -26,6 +26,13 @@ describe JournalsController do
     DataFile.destroy_all
   end
 
+  def create_journal
+    j = Journal.new(name: 'a', num: 1, category_id: FactoryGirl.create(:category).id)
+    j.update_attribute(:data_files, [FactoryGirl.create(:journal_file)])
+    j.update_attribute(:articles, [create_article])
+    j
+  end
+
   def create_article
     Article.create!(title: 'test',
                    data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
@@ -153,6 +160,25 @@ describe JournalsController do
     it 'cover image file' do
       post :create, full_params
       Journal.last.cover_image.should_not be_nil
+    end
+  end
+
+  describe '.index' do
+    describe 'access' do
+      it 'not redirect to login if guest' do
+        get :index
+        response.should_not redirect_to new_user_session_path
+      end
+    end
+
+    describe 'work' do
+      it 'assigns journals' do
+        get :index
+        create_journal
+        create_journal
+        assigns(:journals).count.should be 2
+        assigns(:journals).should =~ Journal.all
+      end
     end
   end
 end
