@@ -164,6 +164,10 @@ describe JournalsController do
   end
 
   describe '.index' do
+    before :each do
+      Journal.destroy_all
+    end
+
     describe 'access' do
       it 'not redirect to login if guest' do
         get :index
@@ -178,6 +182,27 @@ describe JournalsController do
         create_journal
         assigns(:journals).count.should be 2
         assigns(:journals).should =~ Journal.all
+      end
+    end
+  end
+
+  describe '.show' do
+    before :each do
+      Journal.destroy_all
+    end
+
+    describe 'access' do
+      it 'not redirect to login if guest' do
+        get :show
+        response.should_not redirect_to new_user_session_path
+      end
+    end
+
+    describe 'work' do
+      it 'assigns journal' do
+        j = create_journal
+        get :show, id: j.id
+        assigns(:journal).should eql j
       end
     end
   end

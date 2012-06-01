@@ -58,7 +58,7 @@ ar1.update_attribute(:data_files, [DataFile.create(filename: '11test11', tag: Ar
 ar1.save!
 
 #journals
-Journal.create(name: 'Data Mining chemistry', num: 1, category_id: root.id, article_ids: [ar1.id],
+Journal.create(name: 'Data Mining chemistry', num: 1, category_id: root.id, article_ids: [ar.id, ar1.id],
                data_files: [DataFile.create(filename: '22test22', tag: Journal::JOURNAL_FILE_TAG)])
-Journal.create(name: 'Data Mining chemistry', num: 2, category_id: root.id, article_ids: [ar1.id],
+Journal.create(name: 'Data Mining chemistry', num: 2, category_id: root.id, article_ids: [ar.id, ar1.id],
                data_files: [DataFile.create(filename: '33test33', tag: Journal::JOURNAL_FILE_TAG)])

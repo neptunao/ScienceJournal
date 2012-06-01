@@ -7,4 +7,8 @@ module ApplicationHelper
       edit_personal_path
     end
   end
+
+  def data_file_url(filename)
+    "#{root_url}#{filename}"
+  end
 end

@@ -1,0 +1,12 @@
+<%= render 'journal', journal: @journal, link: false %>
+<ul class="unstyled">
+  <% @journal.articles.each do |article| %>
+      <li class="article">
+        <%= link_to article.title, article, class: 'article_name' %>
+        <p>
+          <%= article.authors.map(& :fullname).to_sentence %>
+        </p>
+        <%= link_to 'Download article', data_file_url(article.article.filename) %>
+      </li>
+  <% end %>
+</ul>
