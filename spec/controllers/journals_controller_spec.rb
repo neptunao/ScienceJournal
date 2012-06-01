@@ -17,7 +17,6 @@ describe JournalsController do
   end
 
   before :each do
-    Category.destroy_all
     Article.destroy_all
     DataFile.destroy_all
   end
@@ -93,7 +92,6 @@ describe JournalsController do
     before :all do
       DataFile.destroy_all
       Article.destroy_all
-      Category.destroy_all
       @journal_file = fixture_file_upload('/test_data/test_pdf_file.pdf')
       @image_file = fixture_file_upload('/test_data/test_image.jpg')
     end

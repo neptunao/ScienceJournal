@@ -2,40 +2,35 @@
 <html>
 <head>
   <title>ScienceJournal</title>
-  <%= stylesheet_link_tag    "application", :media => "all" %>
-  <%= javascript_include_tag "application" %>
-  <%= csrf_meta_tags %>
-  <!--[if lt IE 9]>
-  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
+  <%= render 'layouts/include_tags' %>
 </head>
 <body>
 <header class="navbar navbat-fixed-top">
-      <div class="navbar-inner">
-        <nav>
-          <ul class='nav pull-right'>
-            <% if user_signed_in? %>
-                <%= render 'layouts/profile_links' %>
-                <%= render 'layouts/admin_links' if current_user.role? :admin %>
-                <%= render 'layouts/author_links' if current_user.role? :author %> <!-- TODO test -->
-                <%= render 'layouts/censor_links' if current_user.role? :censor %> <!-- TODO test -->
-                <li><%= link_to 'Sign out', logout_path %></li>
-            <% else %>
-                <li><%= link_to 'Sign in', login_path %></li>
-                <li><%= link_to 'Sign up', register_path %></li>
-             <% end %>
-            <li><%= link_to 'Home', root_path %></li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-     <div class="container-fluid">
-       <div>
-         <% flash.each do |key, value| %>
-           <%= content_tag :div, value, class: "alert alert-#{key}" %>
-         <% end %>
-       </div>
-        <%= content_for?(:content) ? yield(:content) : yield %>
-     </div>
+  <div class="navbar-inner">
+    <nav>
+      <ul class='nav pull-right'>
+        <% if user_signed_in? %>
+            <%= render 'layouts/profile_links' %>
+            <%= render 'layouts/admin_links' if current_user.role? :admin %>
+            <%= render 'layouts/author_links' if current_user.role? :author %> <!-- TODO test -->
+            <%= render 'layouts/censor_links' if current_user.role? :censor %> <!-- TODO test -->
+            <li><%= link_to 'Sign out', logout_path %></li>
+        <% else %>
+            <li><%= link_to 'Sign in', login_path %></li>
+            <li><%= link_to 'Sign up', register_path %></li>
+        <% end %>
+        <li><%= link_to 'Home', root_path %></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="container-fluid">
+  <div>
+    <% flash.each do |key, value| %>
+        <%= content_tag :div, value, class: "alert alert-#{key}" %>
+    <% end %>
+  </div>
+  <%= content_for?(:content) ? yield(:content) : yield %>
+</div>
 </body>
 </html>

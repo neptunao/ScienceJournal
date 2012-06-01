@@ -12,7 +12,6 @@ ScienceJournal::Application.routes.draw do
     get "/register" => "devise/registrations#new"
     get "/logout" => "devise/sessions#destroy"
   end
-  match 'cabinet' => 'pages#cabinet'
   match '/users' => 'users#index', as: :all_users, via: :get
   match '/users/show' => 'users#show', as: :show_user, via: :get
   match '/users/show/:id' => 'users#show', as: :show_user, via: :get

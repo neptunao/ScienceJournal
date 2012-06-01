@@ -29,10 +29,6 @@ describe 'Admin' do
     visit logout_path
     User.delete_all
   end
-  it 'cabinet page contains pending registrations link' do
-    visit '/cabinet'
-    response.should have_selector 'a', href: '/users?approved=false', content: 'Pending registrations'
-  end
   it 'approved users page contains list of unapproved users' do
     visit '/users?approved=false'
     @users.each do |user|
