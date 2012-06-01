@@ -38,4 +38,41 @@ describe 'Categories' do
     click_link c.title
     current_url.should eql journals_path(category_id: c.id)
   end
+
+  it '/new create new category' do
+    login @admin
+    visit new_category_path
+    fill_in 'category[title]', with: 'test'
+    expect { click_button 'Create category' }.to change(Category, :count).by 1
+  end
+
+  it 'create with errors render new' do
+    login @admin
+    visit new_category_path
+    click_button 'Create category'
+    response.should render_template 'categories/new'
+  end
+
+  it '/edit update category' do
+    login @admin
+    c = FactoryGirl.create(:category)
+    visit edit_category_path(c)
+    fill_in 'category[title]', with: 'test123'
+    click_button 'Update category'
+    c.reload.title.should eql 'test123'
+  end
+
+  it 'update with errors render edit' do
+    login @admin
+    c = FactoryGirl.create(:category)
+    visit edit_category_path(c)
+    fill_in 'category[title]', with: ''
+    click_button 'Update category'
+    response.should render_template 'categories/edit'
+  end
+
+  it 'destroy node' do
+    pending 'cant write test with JS confirm window'
+  end
+
 end

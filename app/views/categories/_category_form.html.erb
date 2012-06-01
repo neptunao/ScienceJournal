@@ -1,0 +1,10 @@
+<%= form_for object do |f| %>
+    <%= render 'shared/errors_explanation', object: object %>
+    <div>
+      <%= f.label :title %>
+      <%= f.text_field :title %>
+    </div>
+    <div>
+      <%= f.submit %>
+    </div>
+<% end %>
