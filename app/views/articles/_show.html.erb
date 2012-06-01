@@ -1,21 +1,13 @@
-<h1>Article</h1>
-<p>
-  <b>Status: </b>
-  <%= status_str %>
-</p>
+<h1><%= @article.title %></h1>
 <p>
   <b>Category: </b>
   <%= @article.category.title %>
 </p>
 <p>
-  <b>Title:</b>
-  <%= @article.title %>
-</p>
-<p>
   <b>Authors:</b>
       <ul>
         <% @article.authors.each do |author| %>
-            <li>Name: <%= author.fullname %></li>
+            <li><%= author.fullname %></li>
         <% end %>
   </ul>
 </p>

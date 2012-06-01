@@ -26,19 +26,6 @@ describe JournalsController do
     DataFile.destroy_all
   end
 
-  def create_journal
-    j = Journal.new(name: 'a', num: 1, category_id: FactoryGirl.create(:category).id)
-    j.update_attribute(:data_files, [FactoryGirl.create(:journal_file)])
-    j.update_attribute(:articles, [create_article])
-    j
-  end
-
-  def create_article
-    Article.create!(title: 'test',
-                   data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                   author_ids: [FactoryGirl.create(:author).id])
-  end
-
   describe '.new' do
     describe 'access' do
       it 'redirect to login if guest' do

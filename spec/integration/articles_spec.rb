@@ -6,4 +6,9 @@ describe 'Articles' do
     visit new_article_path
     pending 'todo with capybara find'
   end
+
+  it 'index visited successfully by guest' do
+    visit articles_path
+    response.should be_success
+  end
 end
