@@ -47,6 +47,7 @@ top1 = Category.create(title: 'Data Mining')
 top2 = Category.create(title: 'Chemistry')
 top1.children = [child1]
 root.children = [top1, top2]
+Category.rebuild!
 
 #articles
 ar = Article.create!(title: 'Coding at machine lerning', data_files: data_files, author_ids: [author1.id], category_id: root.id, status: Article::STATUS_APPROVED)
