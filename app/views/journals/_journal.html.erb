@@ -1,0 +1,11 @@
+<div class="cover">
+  <%= journal_cover journal %>
+</div>
+<div class='row'>
+  <div class="span8">
+    <p class="journal_name"><%= link ? link_to(journal.name, journal) : journal.name %></p>
+    <p>Volume <%= journal.num %></p>
+    <p class="category"><%= journal.category.title %></p>
+    <%= yield %>
+  </div>
+</div>

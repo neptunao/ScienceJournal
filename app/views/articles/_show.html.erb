@@ -21,12 +21,12 @@
 </p>
 <b>Downloads:</b>
 <ul>
-  <li><%= link_to 'Download article', "#{root_url}#{@article.article.filename}" %></li>
-  <li><%= link_to 'Download russian resume', "#{root_url}#{@article.resume_rus.filename}" %></li>
-  <li><%= link_to 'Download english resume', "#{root_url}#{@article.resume_eng.filename}" %></li>
-  <li><%= link_to 'Download cover note', "#{root_url}#{@article.cover_note.filename}" %></li>
+  <li><%= link_to 'Download article', data_file_url(@article.article.filename) %></li>
+  <li><%= link_to 'Download russian resume', data_file_url(@article.resume_rus.filename) %></li>
+  <li><%= link_to 'Download english resume', data_file_url(@article.resume_eng.filename) %></li>
+  <li><%= link_to 'Download cover note', data_file_url(@article.cover_note.filename) %></li>
   <% if @article.review  %>
-    <li><%= link_to 'Download review', "#{root_url}#{@article.review.filename}" %></li>
+    <li><%= link_to 'Download review', data_file_url(@article.review.filename) %></li>
   <% end %>
 </ul>
 <% if @article.censor %>

@@ -1,15 +1,7 @@
 <ol>
-    <% @journals.each do |journal| %>
-      <li>
-        <div class="cover">
-            <% if journal.cover_image %>
-                <%= image_tag "../#{journal.cover_image.filename}", size: '90x120' %>
-            <% else %>
-                <%= image_tag 'not_avaliable.jpeg', size: '90x120' %>
-            <% end %>
-         </div>
-          <p><%= link_to journal.name, journal %></p>
-          <p>Volume <%= journal.num %></p>
+  <% @journals.each do |journal| %>
+      <li class="clear">
+        <%= render 'journal', journal: journal, link: true %>
       </li>
-    <% end %>
+  <% end %>
 </ol>

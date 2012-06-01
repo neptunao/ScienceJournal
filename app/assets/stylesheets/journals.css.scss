@@ -4,16 +4,33 @@
 }
 
 .journal_name {
-  font-size: large;
+  font-size: x-large;
   font-weight: bold;
   font-family: Minion, Garamond, Serif;
   color: #da4e49;
 }
 
-.vertical_top {
-  vertical-align: top;
-}
-
 .cover {
   float: left;
+  padding-bottom: 10px;
+  padding-right: 5px;
+}
+
+.clear {
+  clear: both;
+}
+
+.article_name {
+  font-size: large;
+  font-weight: bold;
+  color: #b8860b;
+}
+
+.category {
+  color: #2f4f4f;
+  font-size: 110%;
+}
+
+.article {
+  padding-bottom: 10px;
 }

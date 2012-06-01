@@ -1,5 +1,5 @@
 class JournalsController < ApplicationController
-  before_filter :authenticate_user!, except: [:index]
+  before_filter :authenticate_user!, except: [:index, :show]
   before_filter :initialize_assigns, only: [:new, :create]
   load_and_authorize_resource
 
@@ -11,7 +11,9 @@ class JournalsController < ApplicationController
   end
 
   def index
+  end
 
+  def show
   end
 
   def create
