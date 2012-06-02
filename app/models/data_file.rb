@@ -1,4 +1,6 @@
 class DataFile < ActiveRecord::Base
+  belongs_to :article
+  belongs_to :journal
   attr_accessible :filename, :tag
   validates :filename, presence: true, uniqueness: true
   after_destroy :after_destroy_action
