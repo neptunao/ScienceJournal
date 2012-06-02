@@ -4,7 +4,6 @@ describe 'authors/new' do
   before :all do
     DataFile.destroy_all
     User.destroy_all
-    load "#{Rails.root}/db/seeds.rb"
   end
 
   before :each do

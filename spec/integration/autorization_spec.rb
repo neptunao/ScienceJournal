@@ -5,7 +5,6 @@ describe 'Autorization' do
   before :all do
     DataFile.destroy_all
     User.destroy_all
-    load "#{Rails.root}/db/seeds.rb"
     @user = FactoryGirl.create(:user)
     @admin = FactoryGirl.create(:admin_user)
   end

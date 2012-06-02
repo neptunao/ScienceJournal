@@ -16,7 +16,7 @@ describe 'Abilities of' do
   before :all do
     DataFile.destroy_all
     User.destroy_all
-    load "#{Rails.root}/db/seeds.rb"
+    load_roles
     @guest_user = FactoryGirl.build(:guest_user)
     @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.create(:censor_user)

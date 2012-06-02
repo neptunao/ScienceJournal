@@ -5,7 +5,7 @@ describe 'Admin' do
   before :all do
     DataFile.destroy_all
     User.destroy_all
-    load "#{Rails.root}/db/seeds.rb"
+    load_roles
     @user1 = FactoryGirl.create(:censor_user)
     @user2 = FactoryGirl.create(:censor_user, name: @user1.name + '1', email: @user1.email + 'a')
     @user3 = FactoryGirl.create(:censor_user, name: @user1.name + '2', email: @user1.email + 'b')

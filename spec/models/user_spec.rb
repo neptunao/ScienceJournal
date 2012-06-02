@@ -2,17 +2,13 @@ require 'spec_helper'
 
 describe User do
   before :each do
+    User.destroy_all
     DataFile.destroy_all
-    load "#{Rails.root}/db/seeds.rb"
+    load_roles
   end
 
   def admin_user
-    User.find_by_name('admin')
-  end
-
-  it 'admin should exist' do
-    admin_user.roles.first.should_not be_nil
-    admin_user.roles.first.name.should eql 'admin'
+    User.find_by_name('admin') || FactoryGirl.create(:admin_user)
   end
 
   it 'name should exists' do

@@ -33,6 +33,7 @@ Spork.prefork do
 end
 
 Spork.each_run do
+  load_roles
 end
 
 def create_journal
@@ -68,4 +69,11 @@ def login(user)
   fill_in 'Email', with: user.email
   fill_in 'Password', with: user.password
   click_button 'Sign in'
+end
+
+def load_roles
+  Role.create(name: :guest)
+  Role.create(name: :author)
+  Role.create(name: :censor)
+  Role.create(name: :admin)
 end

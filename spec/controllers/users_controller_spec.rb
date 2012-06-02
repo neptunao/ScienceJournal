@@ -4,7 +4,6 @@ describe UsersController do
   before :all do
     DataFile.destroy_all
     User.destroy_all
-    load "#{Rails.root}/db/seeds.rb"
     @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.create(:censor_user)
     @users = [@author_user, @censor_user]
