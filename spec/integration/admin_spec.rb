@@ -32,7 +32,7 @@ describe 'Admin' do
   it 'approved users page contains list of unapproved users' do
     visit '/users?approved=false'
     @users.each do |user|
-      response.should have_selector 'a', href: edit_user_registration_path(user), content: user.name
+      response.should have_selector 'a', href: show_user_path(user), content: user.name
       response.should have_selector 'input', name: "approved[#{user.id}]", type: 'checkbox'
       response.should have_selector 'label', content: user.email
       response.should have_selector 'input', type: 'submit'
