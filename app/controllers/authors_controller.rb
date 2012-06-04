@@ -2,10 +2,6 @@ class AuthorsController < ApplicationController
   before_filter :authenticate_user!
   load_and_authorize_resource
 
-  def index #TODO
-
-  end
-
   def show
     @author = Author.find(params[:id])
   end
@@ -34,9 +30,5 @@ class AuthorsController < ApplicationController
     else
       render :edit
     end
-  end
-
-  def destroy #TODO
-
   end
 end

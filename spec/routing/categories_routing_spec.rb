@@ -3,8 +3,8 @@ describe "Categories routing" do
     { get: '/categories' }.should route_to controller: 'categories', action: 'index'
   end
 
-  it 'routes to show' do
-    { get: '/categories/1/'}.should route_to controller: 'categories', action: 'show', id: '1'
+  it 'no routes to show' do
+    { get: '/categories/1/'}.should_not route_to controller: 'categories', action: 'show', id: '1'
   end
 
   it 'routes to new' do

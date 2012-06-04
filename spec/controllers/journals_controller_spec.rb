@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe JournalsController do
   before :all do
+    FactoryGirl.create(:category)
     User.destroy_all
 
     @author_user = FactoryGirl.create(:user)

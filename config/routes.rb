@@ -1,11 +1,11 @@
 ScienceJournal::Application.routes.draw do
   root :to => 'pages#home'
-  resources :authors
-  resources :articles
-  resources :journals do
+  resources :authors, except: [:index, :destroy]
+  resources :articles, except: [:edit, :destroy]
+  resources :journals, except: [:edit, :update, :destroy] do
     resources :articles, only: [:show]
   end
-  resources :categories do
+  resources :categories, except: [:show] do
     collection do
       post :rebuild
     end

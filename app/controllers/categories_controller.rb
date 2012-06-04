@@ -11,10 +11,6 @@ class CategoriesController < ApplicationController
     @categories = Category.nested_set.all
   end
 
-  def show
-
-  end
-
   def edit
     @category = Category.find(params[:id])
   end

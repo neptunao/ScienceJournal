@@ -32,6 +32,8 @@ class JournalsController < ApplicationController
     end
   end
 
+  private
+
   def add_file_and_delete_param(params)
     hash = params[:params_hash]
     key = params[:key]
@@ -40,8 +42,6 @@ class JournalsController < ApplicationController
       hash.delete(key)
     end
   end
-
-  private
 
   def initialize_assigns
     @journal = Journal.new
