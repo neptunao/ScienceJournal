@@ -45,8 +45,13 @@ class JournalsController < ApplicationController
 
   def initialize_assigns
     @journal = Journal.new
-    @articles = Article.where(status: Article::STATUS_APPROVED)
-    @articles = @articles.where(category_id: params[:journal][:category_id]) if params[:journal] && params[:journal][:category_id]
+    approved_articles = Article.where(status: Article::STATUS_APPROVED)
+    @articles = approved_articles.where(category_id: Category.first!.id)
+    if params[:journal] && params[:journal][:category_id]
+      @articles = approved_articles.where(category_id: params[:journal][:category_id])
+    else
+      @articles = approved_articles.where(category_id: Category.first!.id)
+    end
     @categories = Category.all
   end
 end

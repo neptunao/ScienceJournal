@@ -61,11 +61,14 @@ describe JournalsController do
         assigns(:categories).should =~ Category.all
       end
 
-      it 'assign approved articles' do
-        get :new
+      it 'assign approved articles at root category (fixed B12 - articles not show on init journals#new)' do
         a = create_article
+        a1 = create_article
         a.update_attribute(:status, Article::STATUS_APPROVED)
+        a.update_attribute(:category_id, Category.first!.id)
+        a1.update_attribute(:status, Article::STATUS_APPROVED)
         create_article
+        get :new
         assigns(:articles).count.should be 1
         assigns(:articles)[0].should eql a
       end
