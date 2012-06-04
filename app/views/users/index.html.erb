@@ -6,7 +6,7 @@
                 <%= label_tag 'email', 'email: ' %>
                 <%= label_tag "email[#{user.id}]", user.email  %>
                 <%= label_tag 'name', 'name: ' %>
-                <%= link_to user.name, edit_user_registration_path(user) %>
+                <%= link_to user.name, show_user_path(user) %>
                 <%= check_box_tag "approved[#{user.id}]" %>
               </li>
           <% end %>
