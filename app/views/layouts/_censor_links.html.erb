@@ -5,7 +5,7 @@
       <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
-      <li><%= link_to 'Pending articles', pending_articles_link %></li>
+      <li><%= link_to 'Pending articles', articles_link(status: Article::STATUS_TO_REVIEW, censor_id: current_person_id) %></li>
     </ul>
   </li>
 </ul>

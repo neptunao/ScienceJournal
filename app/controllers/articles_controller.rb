@@ -4,6 +4,7 @@ class ArticlesController < ApplicationController
   load_and_authorize_resource
 
   def index
+    return @articles = Article.select { |a| a.author_ids.include?(params[:author_id].to_i) } if params[:author_id]
     exp = params.select { |k, v| k == 'status' || k == 'censor_id' }
     @articles = Article.where(exp) unless params[:status].nil?
   end

@@ -276,6 +276,20 @@ describe ArticlesController do
       assigns(:articles).should eql [article]
       sign_out user
     end
+
+    it 'B13 - my articles links in author layout display all approved articles' do
+      user = create_user
+      a = create_article
+      a1 = create_article
+      expected = [a, a1]
+      expected.each { |ar| ar.update_attribute(:author_ids, [user.person.id]) }
+      invalid = create_article
+      invalid.update_attribute(:status, Article::STATUS_APPROVED)
+      sign_in user
+      get :index, author_id: user.person.id
+      assigns(:articles).should =~ expected
+      sign_out user
+    end
   end
 
   describe '.show' do

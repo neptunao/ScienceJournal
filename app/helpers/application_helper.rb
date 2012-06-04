@@ -1,9 +1,13 @@
 module ApplicationHelper
-  def pending_articles_link
+  def current_person_id
+    (current_user && current_user.person) ? current_user.person.id : nil
+  end
+
+  def articles_link(params)
     if current_user.person && current_user.person.valid?  #TODO test
-      articles_path(status: Article::STATUS_TO_REVIEW, censor_id: current_user.person.id)
+      articles_path(params)
     else
-      flash[:notice] = 'You must fill personal information before view pending articles.'
+      flash[:notice] = 'You must fill personal information before.'
       edit_personal_path
     end
   end
