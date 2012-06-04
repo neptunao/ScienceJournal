@@ -70,20 +70,21 @@ describe JournalsController do
         assigns(:articles)[0].should eql a
       end
 
-      it 'assign articles with category_id' do
-        a1 = create_article
-        a2 = create_article
-        category_id = FactoryGirl.create(:category).id
-        a1.update_attribute(:category_id, FactoryGirl.create(:category).id)
-        a2.update_attribute(:category_id, category_id)
-        get :new, journal: { category_id: category_id }
-        assigns(:articles).count.should be 1
-        assigns(:articles)[0].should eql a2
-      end
-
       it 'response with js' do
         get :new, format: :js
         response.should be_success
+      end
+
+      it 'assign articles with category_id (fixed B15 - not approved articles show on init journals#new)' do
+        a1 = create_article
+        a2 = create_article
+        category_id = FactoryGirl.create(:category).id
+        a1.update_attribute(:category_id, category_id)
+        a2.update_attribute(:category_id, category_id)
+        a2.update_attribute(:status, Article::STATUS_APPROVED)
+        get :new, journal: { category_id: category_id }
+        assigns(:articles).count.should be 1
+        assigns(:articles)[0].should eql a2
       end
     end
   end
