@@ -2,18 +2,18 @@
 - img_edit = image_tag('edit.png', :class => :nested_set_edit_image)
 - edit = link_to img_edit, polymorphic_url(opts[:namespace] + [node], :action => :edit), :title => ('.edit_this'), :class => 'button edit'
 -# DELETE
-- ing_delete = image_tag('delete.png', :class => :nested_set_delete_image)
+- img_delete = image_tag('delete.png', :class => :nested_set_delete_image)
 - if opts[:has_children]
-  - delete =  link_to(ing_delete, url_for(opts[:namespace] + [node]),
+  - delete =  link_to(img_delete, url_for(opts[:namespace] + [node]),
     :title    =>  ("delete #{node.id}"),
     :method   =>  :delete,
     :confirm  =>  ('Are you sure?'),
     :class    =>  'button delete')
-- else
-  -img_cant_delete = image_tag('cant_delete.png', :class => :nested_set_delete_image)
-  - delete =  link_to(img_cant_delete, '#',
-    :title    =>  ('.cant_be_deleted'),
-    :onclick  =>  "alert('#{('Unable to delete because this node has children elements.')}')",
-    :class    =>  'button undeleted')
+- else #TODO remove duplication
+  - delete =  link_to(img_delete, url_for(opts[:namespace] + [node]),
+    :title    =>  ("delete #{node.id}"),
+    :method   =>  :delete,
+    :confirm  =>  ('Are you sure?'),
+    :class    =>  'button delete')
 -# OUTPUT
 = edit + delete
