@@ -5,6 +5,10 @@ class ProfileController < ApplicationController
   end
 
   def edit_personal_info
+    if current_user.role?(:admin)
+      flash[:notice] = 'Admin user has no personal info.'
+      return redirect_to show_profile_path
+    end
     if current_user.person.nil?
       current_user.person = Author.new if current_user.role? :author
       current_user.person = Censor.new if current_user.role? :censor

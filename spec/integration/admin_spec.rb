@@ -76,4 +76,9 @@ describe 'Admin' do
     article.reload
     article.status.should be Article::STATUS_APPROVED
   end
+
+  it 'B6 - exception when admin request edit_personal_info' do
+    visit edit_personal_path
+    current_url.should eql show_profile_url
+  end
 end
