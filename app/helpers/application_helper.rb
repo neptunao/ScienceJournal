@@ -19,4 +19,8 @@ module ApplicationHelper
   def person?
     current_user && current_user.person
   end
+
+  def current_role?(role)
+    current_user && current_user.role?(role)
+  end
 end

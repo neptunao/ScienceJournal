@@ -1,4 +1,4 @@
-<% if current_user && current_user.role?(:admin) %>
+<% if current_role? :admin %>
     <%=  sortable_tree @categories, new_url: new_category_path, type: :sortable, path: 'categories/sortable/base' %>
 <% else %>
     <%=  sortable_tree @categories, new_url: new_category_path, path: 'categories/tree/base' %>

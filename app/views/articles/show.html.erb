@@ -1,18 +1,4 @@
 <%= render 'show' %>
-<% if current_user && current_user.role?(:admin) %>
-    <%= form_for @article do |f| %>
-        <% case @article.status %>
-        <% when Article::STATUS_CREATED %>
-            <b>Select censor:</b> <br/>
-            <%= f.hidden_field :status, value: Article::STATUS_TO_REVIEW %>
-            <%= f.select :censor_id, options_from_collection_for_select(Censor.all, "id", "fullname") %> <br />
-        <% when Article::STATUS_REVIEWED %>
-            <b>Approve:</b>
-            <%= f.check_box :status, {}, Article::STATUS_APPROVED %> <br/>
-        <% end %>
-        <%= f.submit %>
-    <% end %>
-<% end %>
 <% if can?(:update, @article) %>
     <%= link_to 'edit', edit_article_path(@article) %>
 <% end %>
