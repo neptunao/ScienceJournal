@@ -1,4 +1,10 @@
 <h1><%= @article.title %></h1>
+<% if current_user %>
+    <p>
+      <b>Status: </b>
+      <%= status_str %>
+    </p>
+<%end%>
 <p>
   <b>Category: </b>
   <%= @article.category.title %>
@@ -6,11 +12,11 @@
 <% if censor_article? %>
     <p>
       <b>Authors:</b>
-          <ul id='authors'>
-            <% @article.authors.each do |author| %>
-                <li><%= author.fullname %></li>
-            <% end %>
-      </ul>
+    <ul id='authors'>
+      <% @article.authors.each do |author| %>
+          <li><%= author.fullname %></li>
+      <% end %>
+    </ul>
     </p>
 <% end %>
 <b>Downloads:</b>
@@ -20,7 +26,7 @@
   <li><%= link_to 'Download english resume', data_file_url(@article.resume_eng.filename) %></li>
   <li><%= link_to 'Download cover note', data_file_url(@article.cover_note.filename) %></li>
   <% if @article.review  %>
-    <li><%= link_to 'Download review', data_file_url(@article.review.filename) %></li>
+      <li><%= link_to 'Download review', data_file_url(@article.review.filename) %></li>
   <% end %>
 </ul>
 <% if @article.censor %>
