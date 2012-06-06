@@ -87,6 +87,15 @@ ar4.update_attribute(:data_files, [DataFile.create(filename: '111test1121', tag:
 
 ar4.save!
 
+ar5 = Article.new(title: 'Review test2', author_ids: [author2.id, author3.id], status: Article::STATUS_REVIEWED, category_id: child1.id, censor_id: censor2.id)
+ar5.update_attribute(:data_files, [DataFile.create(filename: '1121test1121', tag: Article::ARTICLE_FILE_TAG),
+                                   DataFile.create(filename: '2211test1221', tag: Article::RESUME_RUS_FILE_TAG),
+                                   DataFile.create(filename: '3121test1132', tag: Article::RESUME_ENG_FILE_TAG),
+                                   DataFile.create(filename: '4121test1412', tag: Article::COVER_NOTE_FILE_TAG),
+                                   DataFile.create(filename: '1review1', tag:Article::REVIEW_FILE_TAG)])
+
+ar5.save!
+
 #journals
 Journal.create!(name: 'Data Mining chemistry', num: 1, category_id: root.id, article_ids: [ar.id, ar1.id],
                 data_files: [DataFile.create(filename: '212test232', tag: Journal::JOURNAL_FILE_TAG)])

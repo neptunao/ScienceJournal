@@ -60,7 +60,7 @@ describe 'Admin' do
     Censor.destroy_all
     censor = FactoryGirl.create(:censor)
     article = create_article(status: Article::STATUS_CREATED)
-    visit article_path(article)
+    visit edit_article_path(article)
     select censor.fullname, from: "article[censor_id]"
     click_button 'Update Article'
     article.reload
@@ -72,11 +72,22 @@ describe 'Admin' do
     article = create_article(status: Article::STATUS_REVIEWED)
     article.data_files << FactoryGirl.create(:review)
     article.save!
-    visit article_path(article)
-    check 'article[status]'
+    visit edit_article_path(article)
+    choose "article_status_#{Article::STATUS_APPROVED}"
     click_button 'Update Article'
     article.reload
     article.status.should be Article::STATUS_APPROVED
+  end
+
+  it 'reject reviewed article' do
+    article = create_article(status: Article::STATUS_REVIEWED)
+    article.data_files << FactoryGirl.create(:review)
+    article.save!
+    visit edit_article_path(article)
+    choose "article_status_#{Article::STATUS_REJECTED}"
+    click_button 'Update Article'
+    article.reload
+    article.status.should be Article::STATUS_REJECTED
   end
 
   it 'B6 - exception when admin request edit_personal_info' do

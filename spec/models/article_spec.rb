@@ -111,6 +111,16 @@ describe Article do
     article.should_not be_valid
   end
 
+  it 'delete all data_files except review from rejected article' do
+    article = create_article
+    review = FactoryGirl.create(:review)
+    article.data_files << review
+    article.status = Article::STATUS_REJECTED
+    article.save!
+    article.data_files.count.should be 1
+    article.review.should eql review
+  end
+
   def fill_with(params)
     data_files = []
     params[:times_count].times { |i| data_files << FactoryGirl.create(params[:object]) }

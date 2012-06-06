@@ -21,12 +21,12 @@ class Article < ActiveRecord::Base
   accepts_nested_attributes_for :authors
   accepts_nested_attributes_for :censor
   validates :title, :status, presence: true
-  validates :article, :resume_rus, :resume_eng, :cover_note, presence: true
+  validates :article, :resume_rus, :resume_eng, :cover_note, presence: true, if: 'status != STATUS_REJECTED'
   validates :data_files, :length => { maximum: 5 }
   validates :authors, :length => { in: 1..11 }
   validates_associated :censor  #TODO test
-  validates :review, presence: true, if: 'self.status == STATUS_REVIEWED || self.status == STATUS_REJECTED_BY_CENSOR'
-  validates :reject_reason, presence: true, if: 'self.status == STATUS_REJECTED_BY_CENSOR'
+  validates :review, presence: true, if: 'status == STATUS_REVIEWED || self.status == STATUS_REJECTED_BY_CENSOR'
+  validates :reject_reason, presence: true, if: 'status == STATUS_REJECTED_BY_CENSOR'
   after_save :after_save_action
 
   def article
@@ -53,5 +53,6 @@ class Article < ActiveRecord::Base
 
   def after_save_action
     DataFile.destroy_unowned
+    self.update_attribute(:data_files, [review]) if status == STATUS_REJECTED && data_files.count > 1
   end
 end

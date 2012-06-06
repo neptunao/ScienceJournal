@@ -21,13 +21,11 @@
 <% end %>
 <b>Downloads:</b>
 <ul>
-  <li><%= link_to 'Download article', data_file_url(@article.article.filename) %></li>
-  <li><%= link_to 'Download russian resume', data_file_url(@article.resume_rus.filename) %></li>
-  <li><%= link_to 'Download english resume', data_file_url(@article.resume_eng.filename) %></li>
-  <li><%= link_to 'Download cover note', data_file_url(@article.cover_note.filename) %></li>
-  <% if @article.review  %>
-      <li><%= link_to 'Download review', data_file_url(@article.review.filename) %></li>
-  <% end %>
+  <%= data_file_link 'Download article', @article.article %>
+  <%= data_file_link 'Download russian resume', @article.resume_rus %>
+  <%= data_file_link 'Download english resume', @article.resume_eng %>
+  <%= data_file_link 'Download cover note', @article.cover_note %>
+  <%= data_file_link 'Download review', @article.review %>
 </ul>
 <% if @article.censor %>
     <b>Censor:</b>
@@ -36,4 +34,10 @@
     <%= @article.censor.post %>
     Degree:
     <%= @article.censor.degree %>
+<% end %>
+<% if reject_reason_exist? %>
+    <div>
+      <b>Reject reason: </b>
+      <%= @article.reject_reason %>
+    </div>
 <% end %>

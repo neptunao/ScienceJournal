@@ -15,4 +15,16 @@ module ArticlesHelper
   def censor_article?
     person? && !(current_user.role?(:censor) && @article.censor_id == current_user.person.id)
   end
+
+  def data_file_link(caption, file)
+    if file
+      content_tag :li do
+        link_to caption, data_file_url(file.filename)
+      end
+    end
+  end
+
+  def reject_reason_exist?
+    (@article.status == Article::STATUS_REJECTED || @article.status == Article::STATUS_REJECTED_BY_CENSOR) && @article.reject_reason
+  end
 end

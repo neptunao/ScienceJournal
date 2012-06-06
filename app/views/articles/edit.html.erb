@@ -25,9 +25,11 @@
               <b>Select censor:</b> <br/>
               <%= f.hidden_field :status, value: Article::STATUS_TO_REVIEW %>
               <%= f.select :censor_id, options_from_collection_for_select(Censor.all, "id", "fullname") %> <br />
-          <% when Article::STATUS_REVIEWED %>
+          <% when Article::STATUS_REVIEWED .. Article::STATUS_REJECTED_BY_CENSOR %>
               <b>Approve:</b>
-              <%= f.check_box :status, {}, Article::STATUS_APPROVED %> <br/>
+              <%= f.radio_button :status, Article::STATUS_APPROVED %> <br/>
+              <b>Reject:</b>
+              <%= f.radio_button :status, Article::STATUS_REJECTED  %> <br/>
           <% end %>
         </div>
     <% end %>
