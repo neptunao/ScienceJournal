@@ -92,6 +92,12 @@ describe Article do
     DataFile.count.should be 0
   end
 
+  it 'must have review if status reviewed' do
+    article = create_article
+    article.update_attribute(:status, Article::STATUS_REVIEWED)
+    article.should_not be_valid
+  end
+
   def fill_with(params)
     data_files = []
     params[:times_count].times { |i| data_files << FactoryGirl.create(params[:object]) }

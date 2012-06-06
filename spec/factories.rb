@@ -63,6 +63,11 @@ FactoryGirl.define do
     tag Article::RESUME_ENG_FILE_TAG
   end
 
+  factory :review, class: 'DataFile' do |file|
+    file.sequence(:filename) { |n| "review_#{n}" }
+    tag Article::REVIEW_FILE_TAG
+  end
+
   factory :cover_note, class: 'DataFile' do |file|
     file.sequence(:filename) { |n| "cover_note_#{n}" }
     tag Article::COVER_NOTE_FILE_TAG

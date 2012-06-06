@@ -1,0 +1,11 @@
+function changeVisibilityByCheckbox(checkbox_id, id) {
+  checkbox = document.getElementById(checkbox_id)
+  document.getElementById(id).style.display = checkbox.checked ? 'block' : 'none'
+}
+
+function changeVisibilityAndStatus(checkbox_id, id, hidden_id) {
+    checkbox = document.getElementById(checkbox_id);
+    changeVisibilityByCheckbox(checkbox_id, id);
+    hidden_field = document.getElementById(hidden_id);
+    hidden_field.value = checkbox.checked ? <%=  Article::STATUS_REJECTED_BY_CENSOR %> : <%= Article::STATUS_REVIEWED %>;
+}

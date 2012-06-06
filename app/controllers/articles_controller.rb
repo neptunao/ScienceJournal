@@ -45,13 +45,21 @@ class ArticlesController < ApplicationController
   def edit
   end
 
-  def update  #TODO TEST
+  def update
     @article = Article.find(params[:id])
-    if @article.update_attributes(params[:article])
+    data_files = @article.data_files.all
+    unless params[:article][:review].nil? || params[:article][:review].to_s.empty?
+      review_file = DataFile.upload(params[:article][:review], Article::REVIEW_FILE_TAG)
+      data_files.delete(data_files.find { |f| f.tag == Article::REVIEW_FILE_TAG } ) if @article.review
+      data_files << review_file
+    end
+    new_params = params[:article].merge( { data_files: data_files } )
+    new_params.delete :review
+    if @article.update_attributes new_params
       flash[:notice] = 'Article updated successfully.'
       redirect_to root_path
     else
-      render :show
+      render :edit
     end
   end
 

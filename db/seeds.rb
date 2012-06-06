@@ -19,6 +19,7 @@ author3 = Author.create(first_name: 'Maxim', middle_name: 'Maximovich', last_nam
 
 #Censors
 censor1 = Censor.create(first_name: 'Alexander', middle_name: 'Vladimirovich', last_name: 'Censor', post: 'rector', degree: 'M.D.')
+censor2 = Censor.create(first_name: 'Sergey', middle_name: 'Alexandrvich', last_name: 'Censor', post: 'assistent', degree: 'P.D.')
 
 #users
 
@@ -32,6 +33,11 @@ author_user.update_attribute(:person, author1)
 censor_user = User.create!(name: 'censor', email: 'censor@mail.ru', password: '123456',
                      password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.censor_role.id])
 censor_user.update_attribute(:person, censor1)
+
+censor_user2 = User.create!(name: 'censor1', email: 'censor1@mail.ru', password: '123456',
+                     password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.censor_role.id])
+censor_user2.update_attribute(:person, censor2)
+censor_user2.update_attribute(:is_approved, true)
 
 #data_files
 article_file = DataFile.create(filename: '1test1', tag: Article::ARTICLE_FILE_TAG)
@@ -72,6 +78,14 @@ ar3.update_attribute(:data_files, [DataFile.create(filename: '111test111', tag: 
                                    DataFile.create(filename: '411test141', tag: Article::COVER_NOTE_FILE_TAG)])
 
 ar3.save!
+
+ar4 = Article.new(title: 'Review test1', author_ids: [author2.id, author3.id], status: Article::STATUS_TO_REVIEW, category_id: child1.id, censor_id: censor2.id)
+ar4.update_attribute(:data_files, [DataFile.create(filename: '111test1121', tag: Article::ARTICLE_FILE_TAG),
+                                   DataFile.create(filename: '211test1221', tag: Article::RESUME_RUS_FILE_TAG),
+                                   DataFile.create(filename: '311test1132', tag: Article::RESUME_ENG_FILE_TAG),
+                                   DataFile.create(filename: '411test1412', tag: Article::COVER_NOTE_FILE_TAG)])
+
+ar4.save!
 
 #journals
 Journal.create!(name: 'Data Mining chemistry', num: 1, category_id: root.id, article_ids: [ar.id, ar1.id],

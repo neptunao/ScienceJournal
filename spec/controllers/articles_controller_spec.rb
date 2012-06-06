@@ -71,10 +71,10 @@ describe ArticlesController do
     def full_params
       author = Author.create(first_name: 'a', middle_name: 'b', last_name: 'c')
       { article: { title: 'test', author_ids: ['', author.id], category_id: @category.id,
-                                       data_files: {
-                article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
-                                       has_review: '1', review: @review_file, censor_attributes: { first_name: 'a1', middle_name: 'a2' ,last_name: 'a3', degree: 'a4', post: 'a5' }
-            } }
+                   data_files: {
+                       article: @article_file, resume_rus: @resume_rus_file, resume_eng: @resume_eng_file, cover_note: @cover_note_file },
+                   has_review: '1', review: @review_file, censor_attributes: { first_name: 'a1', middle_name: 'a2' ,last_name: 'a3', degree: 'a4', post: 'a5' }
+      } }
     end
 
     before :all do
@@ -221,14 +221,14 @@ describe ArticlesController do
       data_files = [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)]
       Article.create(title: 'test', data_files: data_files, author_ids: [FactoryGirl.create(:author).id])
       Article.create(title: 'test',
-                         data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                         author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_REVIEWED)
+                     data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                     author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_REVIEWED)
       Article.create(title: 'test',
-                         data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                         author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_TO_REVIEW)
+                     data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                     author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_TO_REVIEW)
       @censor_article = Article.create(title: 'test',
-                         data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
-                         author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_TO_REVIEW, censor_id: @censor_user.person.id)
+                                       data_files: [FactoryGirl.create(:article_file), FactoryGirl.create(:resume_rus), FactoryGirl.create(:resume_eng), FactoryGirl.create(:cover_note)],
+                                       author_ids: [FactoryGirl.create(:author).id], status: Article::STATUS_TO_REVIEW, censor_id: @censor_user.person.id)
     end
 
     it 'assigns articles without review as @articles' do
@@ -310,6 +310,67 @@ describe ArticlesController do
       assigns(:article).should_not be_nil
       assigns(:article).should eql article
       sign_out @censor_user
+    end
+  end
+
+  describe 'update' do
+    def min_update_params
+      { article: { review: @review_file, status: Article::STATUS_REVIEWED }, reject: 0, id: @article.id }
+    end
+
+    def no_review_params
+      { article: { status: Article::STATUS_REVIEWED }, reject: 0, id: @article.id }
+    end
+
+    before :each do
+      @article = create_article
+      @article.update_attribute(:status, Article::STATUS_TO_REVIEW)
+      @article.update_attribute(:censor, @censor_user.person)
+      sign_in @censor_user
+    end
+
+    after :each do
+      sign_out @censor_user
+    end
+
+    it 'attach review to article' do
+      put :update, min_update_params
+      @article.review.filename.should eql 'data/test_pdf_file4.pdf'
+      @article.review.tag.should eql Article::REVIEW_FILE_TAG
+    end
+
+    it 'recover review file if invalid params' do
+      invalid_params = { article: { title: nil, review: @article_file, status: Article::STATUS_REVIEWED }, reject: 0, id: @article.id }
+      data_files = @article.data_files
+      data_files << FactoryGirl.create(:review)
+      @article.update_attribute(:status, Article::STATUS_REVIEWED)
+      @article.update_attribute(:data_files, data_files)
+      expected_filename = @article.review.filename
+      put :update, invalid_params
+      @article.reload
+      @article.review.filename.should eql expected_filename
+      @article.review.tag.should eql Article::REVIEW_FILE_TAG
+    end
+
+    it 'delete invalid review' do
+      pending 'TODO' #TODO
+      #invalid_params = { article: { title: nil, review: @article_file, status: Article::STATUS_REVIEWED }, reject: 0, id: @article.id }
+      #data_files = @article.data_files
+      #data_files << FactoryGirl.create(:review)
+      #@article.update_attribute(:data_files, data_files)
+      #put :update, invalid_params
+      #@article.reload
+      #@article.review.should be_nil
+    end
+
+    it 'change status to reviewed' do
+      put :update, min_update_params
+      @article.reload
+      @article.status.should be Article::STATUS_REVIEWED
+    end
+
+    it 'should not update without review file' do
+      expect { put :update, no_review_params }.to_not change(@article.reload, :status).to(Article::STATUS_REVIEWED)
     end
   end
 end

@@ -1,6 +1,8 @@
+<%= render 'shared/errors_explanation', object: @article %>
 <h1>Edit article</h1>
 <%= render template: 'articles/_show' %>
 <%= form_for @article do |f| %>
+    <%= f.hidden_field :status, value: Article::STATUS_REVIEWED, id: 'status_field' %>
     <div>
       Review:
       <%= f.file_field :review %>
@@ -8,7 +10,7 @@
     <div class="one_line_item">
       <%= hidden_field_tag :reject, 0 %>
       <%= check_box_tag :reject, '1', false,
-                        { id: 'reject_cb', onclick: 'changeVisibilityByCheckbox("reject_cb", "reject_reason")' } %> Reject
+                        { id: 'reject_cb', onclick: 'changeVisibilityAndStatus("reject_cb", "reject_reason", "status_field")' } %> Reject
     </div>
     <div class="hidden_tag" id='reject_reason'>
       <%= f.label :reject_reason %>

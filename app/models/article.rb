@@ -12,7 +12,7 @@ class Article < ActiveRecord::Base
   STATUS_REJECTED = 5
   STATUS_PUBLISHED = 6
 
-  attr_accessible :status, :title, :data_files, :author_ids, :censor_id, :category_id
+  attr_accessible :status, :title, :data_files, :author_ids, :censor_id, :category_id, :reject_reason
   has_many :data_files, dependent: :destroy
   has_and_belongs_to_many :authors
   belongs_to :censor
@@ -25,6 +25,7 @@ class Article < ActiveRecord::Base
   validates :data_files, :length => { maximum: 5 }
   validates :authors, :length => { in: 1..11 }
   validates_associated :censor  #TODO test
+  validates :review, presence: true, if: 'self.status == Article::STATUS_REVIEWED'
   after_save :after_save_action
 
   def article

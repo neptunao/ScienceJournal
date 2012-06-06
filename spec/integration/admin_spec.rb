@@ -70,6 +70,8 @@ describe 'Admin' do
 
   it 'approve reviewed article' do
     article = create_article(status: Article::STATUS_REVIEWED)
+    article.data_files << FactoryGirl.create(:review)
+    article.save!
     visit article_path(article)
     check 'article[status]'
     click_button 'Update Article'

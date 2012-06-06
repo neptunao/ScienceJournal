@@ -38,4 +38,10 @@ describe 'Censor' do
     visit article_path @article
     response.should_not have_selector 'ul', id: 'authors'
   end
+
+  it 'cant update article without review' do
+    visit edit_article_path(@article)
+    click_button 'Update Article'
+    @article.reload.status.should_not be Article::STATUS_REVIEWED
+  end
 end
