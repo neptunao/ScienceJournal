@@ -25,7 +25,8 @@ class Article < ActiveRecord::Base
   validates :data_files, :length => { maximum: 5 }
   validates :authors, :length => { in: 1..11 }
   validates_associated :censor  #TODO test
-  validates :review, presence: true, if: 'self.status == Article::STATUS_REVIEWED'
+  validates :review, presence: true, if: 'self.status == STATUS_REVIEWED || self.status == STATUS_REJECTED_BY_CENSOR'
+  validates :reject_reason, presence: true, if: 'self.status == STATUS_REJECTED_BY_CENSOR'
   after_save :after_save_action
 
   def article

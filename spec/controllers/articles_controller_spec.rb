@@ -318,6 +318,10 @@ describe ArticlesController do
       { article: { review: @review_file, status: Article::STATUS_REVIEWED }, reject: 0, id: @article.id }
     end
 
+    def rejected_params
+      { article: { review: @review_file, status: Article::STATUS_REJECTED_BY_CENSOR, reject_reason: 'rejected' }, reject: 1, id: @article.id }
+    end
+
     def no_review_params
       { article: { status: Article::STATUS_REVIEWED }, reject: 0, id: @article.id }
     end
@@ -353,7 +357,8 @@ describe ArticlesController do
     end
 
     it 'delete invalid review' do
-      pending 'TODO' #TODO
+      pending 'TODO'
+      #TODO
       #invalid_params = { article: { title: nil, review: @article_file, status: Article::STATUS_REVIEWED }, reject: 0, id: @article.id }
       #data_files = @article.data_files
       #data_files << FactoryGirl.create(:review)
@@ -371,6 +376,25 @@ describe ArticlesController do
 
     it 'should not update without review file' do
       expect { put :update, no_review_params }.to_not change(@article.reload, :status).to(Article::STATUS_REVIEWED)
+    end
+
+    describe 'reject' do
+      it 'change status to rejected' do
+        put :update, rejected_params
+        @article.reload.status.should be Article::STATUS_REJECTED_BY_CENSOR
+      end
+
+      it 'change reject_reason' do
+        put :update, rejected_params
+        @article.reload.reject_reason.should eql rejected_params[:article][:reject_reason]
+      end
+
+      it 'invalid not change article' do
+        invalid_params = { article: { status: Article::STATUS_REJECTED_BY_CENSOR, reject_reason: 'rejected' }, reject: 1, id: @article.id }
+        put :update, invalid_params
+        @article.reload.status.should_not be Article::STATUS_REJECTED_BY_CENSOR
+        @article.reload.reject_reason.should_not eql rejected_params[:article][:reject_reason]
+      end
     end
   end
 end

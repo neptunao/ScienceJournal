@@ -98,6 +98,19 @@ describe Article do
     article.should_not be_valid
   end
 
+  it 'must have reject_reason if rejected by censor' do
+    article = create_article
+    article.update_attribute(:status, Article::STATUS_REJECTED_BY_CENSOR)
+    article.should_not be_valid
+  end
+
+  it 'must have review if rejected by censor' do
+    article = create_article
+    article.update_attribute(:status, Article::STATUS_REJECTED_BY_CENSOR)
+    article.update_attribute(:reject_reason, 'test')
+    article.should_not be_valid
+  end
+
   def fill_with(params)
     data_files = []
     params[:times_count].times { |i| data_files << FactoryGirl.create(params[:object]) }
