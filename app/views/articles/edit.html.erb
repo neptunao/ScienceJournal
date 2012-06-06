@@ -5,6 +5,15 @@
       Review:
       <%= f.file_field :review %>
     </div>
+    <div class="one_line_item">
+      <%= hidden_field_tag :reject, 0 %>
+      <%= check_box_tag :reject, '1', false,
+                        { id: 'reject_cb', onclick: 'changeVisibilityByCheckbox("reject_cb", "reject_reason")' } %> Reject
+    </div>
+    <div class="hidden_tag" id='reject_reason'>
+      <%= f.label :reject_reason %>
+      <%= f.text_area :reject_reason %>
+    </div>
     <div>
       <%= f.submit %>
     </div>
