@@ -20,12 +20,15 @@ class Ability
           a.author_ids.include? user.person_id
         end
       else
-          can :create, Author
+        can :create, Author
       end
     end
 
     if user.role?(:censor) && user.is_approved?
-      can :read, Article, censor_id: user.person.id if user.person
+      if user.person
+        can :read, Article, censor_id: user.person.id
+        can :update, Article, censor_id: user.person.id, status: Article::STATUS_TO_REVIEW
+      end
     end
     # Define abilities for the passed in user here. For example:
     #

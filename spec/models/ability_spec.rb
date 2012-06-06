@@ -21,7 +21,6 @@ describe 'Abilities of' do
     @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.create(:censor_user)
     @censor_user.person = FactoryGirl.create(:censor)
-    @censor_user.update_attribute(:is_approved, true)
   end
 
   after :all do
@@ -31,6 +30,7 @@ describe 'Abilities of' do
 
   before :each do
     @author_user.person = nil
+    @censor_user.update_attribute(:is_approved, true)
   end
 
   it 'admin can manage all' do
@@ -153,5 +153,39 @@ describe 'Abilities of' do
     guest_user_ability.should_not be_can(:destroy, Category)
     author_user_ability.should_not be_can(:destroy, Category)
     censor_user_ability.should_not be_can(:destroy, Category)
+  end
+
+  it 'censor can update his articles' do
+    article = create_article
+    article.update_attribute(:censor_id, @censor_user.person.id)
+    article.update_attribute(:status, Article::STATUS_TO_REVIEW)
+    censor_user_ability.should be_can :update, article
+  end
+
+  it 'censor cant update no his articles' do
+    article = create_article
+    censor_user_ability.should_not be_can :update, article
+  end
+
+  it 'censor cant update articles with no-review status' do
+    article = create_article
+    article.update_attribute(:censor_id, @censor_user.person.id)
+    censor_user_ability.should_not be_can :update, article
+  end
+
+  it 'unapproved censor cant update articles' do
+    article = create_article
+    article.update_attribute(:censor_id, @censor_user.person.id)
+    article.update_attribute(:status, Article::STATUS_TO_REVIEW)
+    @censor_user.update_attribute(:is_approved, false)
+    censor_user_ability.should_not be_can :update, article
+  end
+
+  it 'unapproved censor cant read articles' do
+    article = create_article
+    article.update_attribute(:censor_id, @censor_user.person.id)
+    article.update_attribute(:status, Article::STATUS_TO_REVIEW)
+    @censor_user.update_attribute(:is_approved, false)
+    censor_user_ability.should_not be_can :read, article
   end
 end
