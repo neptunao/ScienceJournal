@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   before_filter :authenticate_user!, except: [:show, :index]
-  before_filter :initialize_assigns, only: [:create, :index, :new]
+  before_filter :initialize_assigns, only: [:create, :index, :new, :edit, :show]
   load_and_authorize_resource
 
   def index
@@ -40,7 +40,9 @@ class ArticlesController < ApplicationController
   end
 
   def show
-    @article = Article.find(params[:id])
+  end
+
+  def edit
   end
 
   def update  #TODO TEST
@@ -83,8 +85,12 @@ class ArticlesController < ApplicationController
   end
 
   def initialize_assigns
-    @article = Article.new
-    @article.censor = Censor.new
+    if params[:id]
+      @article = Article.find(params[:id])
+    else
+      @article = Article.new
+      @article.censor = Censor.new
+    end
     @articles = Article.select {|a| can? :read, a } #TODO test
     @authors = Author.select { |a| a.id != current_user.person.id } if current_user && current_user.person   #TODO test
   end

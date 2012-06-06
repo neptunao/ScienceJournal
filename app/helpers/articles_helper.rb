@@ -7,4 +7,8 @@ module ArticlesHelper
       when Article::STATUS_APPROVED then 'Approved by editor and prepare to be published'
     end
   end
+
+  def censor_article?
+    person? && !(current_user.role?(:censor) && @article.censor_id == current_user.person.id)
+  end
 end

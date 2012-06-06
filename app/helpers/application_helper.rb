@@ -15,4 +15,8 @@ module ApplicationHelper
   def data_file_url(filename)
     "#{root_url}#{filename}"
   end
+
+  def person?
+    current_user && current_user.person
+  end
 end

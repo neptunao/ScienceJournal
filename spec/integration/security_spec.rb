@@ -3,6 +3,7 @@ include Devise::TestHelpers
 
 describe 'Security permissions' do
   before :all do
+    User.destroy_all
     DataFile.destroy_all
     @author_user = FactoryGirl.create(:user)
     @censor_user = FactoryGirl.create(:censor_user)

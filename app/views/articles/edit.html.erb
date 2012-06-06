@@ -1,0 +1,11 @@
+<h1>Edit article</h1>
+<%= render template: 'articles/_show' %>
+<%= form_for @article do |f| %>
+    <div>
+      Review:
+      <%= f.file_field :review %>
+    </div>
+    <div>
+      <%= f.submit %>
+    </div>
+<% end %>

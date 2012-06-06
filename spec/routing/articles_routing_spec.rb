@@ -12,8 +12,8 @@ describe "Articles routing" do
   it 'routes to new' do
     { get: '/articles/new' }.should route_to controller: 'articles', action: 'new'
   end
-  it 'no routes to edit' do
-    { get: '/articles/1/edit' }.should_not route_to controller: 'articles', action: 'edit', id: '1'
+  it 'routes to edit' do
+    { get: '/articles/1/edit' }.should route_to controller: 'articles', action: 'edit', id: '1'
   end
   it 'routes to create' do
     { post: '/articles' }.should route_to controller: 'articles', action: 'create'

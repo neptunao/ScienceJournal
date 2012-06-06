@@ -3,14 +3,16 @@
   <b>Category: </b>
   <%= @article.category.title %>
 </p>
-<p>
-  <b>Authors:</b>
-      <ul>
-        <% @article.authors.each do |author| %>
-            <li><%= author.fullname %></li>
-        <% end %>
-  </ul>
-</p>
+<% if censor_article? %>
+    <p>
+      <b>Authors:</b>
+          <ul id='authors'>
+            <% @article.authors.each do |author| %>
+                <li><%= author.fullname %></li>
+            <% end %>
+      </ul>
+    </p>
+<% end %>
 <b>Downloads:</b>
 <ul>
   <li><%= link_to 'Download article', data_file_url(@article.article.filename) %></li>

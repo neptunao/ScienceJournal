@@ -1,7 +1,7 @@
 ScienceJournal::Application.routes.draw do
   root :to => 'pages#home'
   resources :authors, except: [:index, :destroy]
-  resources :articles, except: [:edit, :destroy]
+  resources :articles, except: [:destroy]
   resources :journals, except: [:edit, :update, :destroy] do
     resources :articles, only: [:show]
   end

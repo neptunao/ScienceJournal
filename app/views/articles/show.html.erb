@@ -19,3 +19,6 @@
         <% end %>
     <% end %>
 <% end %>
+<% if can?(:update, @article) %>
+    <%= link_to 'edit', edit_article_path(@article) %>
+<% end %>

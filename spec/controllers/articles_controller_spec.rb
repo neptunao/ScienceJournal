@@ -301,4 +301,15 @@ describe ArticlesController do
       sign_out @admin_user
     end
   end
+
+  describe '.edit' do
+    it 'assigns @article' do
+      sign_in @censor_user
+      article = create_article
+      get :edit, id: article.id
+      assigns(:article).should_not be_nil
+      assigns(:article).should eql article
+      sign_out @censor_user
+    end
+  end
 end
