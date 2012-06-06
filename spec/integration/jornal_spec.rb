@@ -5,7 +5,7 @@ describe 'Journals' do
     visit '/logout'
     journal = create_journal
     article = journal.articles[0]
-    article.update_attribute(:status, Article::STATUS_APPROVED)
+    article.update_attribute(:status, Article::STATUS_PUBLISHED)
     visit journal_article_path(journal, article.id)
     current_url.should eql journal_article_path(journal, article.id)
   end

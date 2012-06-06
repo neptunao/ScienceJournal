@@ -7,7 +7,10 @@ class Article < ActiveRecord::Base
   STATUS_CREATED = 0
   STATUS_TO_REVIEW = 1
   STATUS_REVIEWED = 2
-  STATUS_APPROVED = 3
+  STATUS_REJECTED_BY_CENSOR = 3
+  STATUS_APPROVED = 4
+  STATUS_REJECTED = 5
+  STATUS_PUBLISHED = 6
 
   attr_accessible :status, :title, :data_files, :author_ids, :censor_id, :category_id
   has_many :data_files, dependent: :destroy

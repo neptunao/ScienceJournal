@@ -50,8 +50,8 @@ root.children = [top1, top2]
 Category.rebuild!
 
 #articles
-ar = Article.create!(title: 'Coding at machine learning', data_files: data_files, author_ids: [author1.id], category_id: root.id, status: Article::STATUS_APPROVED)
-ar1 = Article.new(title: 'Chemistry at coding', author_ids: [author1.id, author2.id, author3.id], status: Article::STATUS_APPROVED, category_id: child1.id)
+ar = Article.create!(title: 'Coding at machine learning', data_files: data_files, author_ids: [author1.id], category_id: root.id, status: Article::STATUS_PUBLISHED)
+ar1 = Article.new(title: 'Chemistry at coding', author_ids: [author1.id, author2.id, author3.id], status: Article::STATUS_PUBLISHED, category_id: child1.id)
 ar1.update_attribute(:data_files, [DataFile.create(filename: '11test11', tag: Article::ARTICLE_FILE_TAG),
                                    DataFile.create(filename: '21test12', tag: Article::RESUME_RUS_FILE_TAG),
                                    DataFile.create(filename: '31test13', tag: Article::RESUME_ENG_FILE_TAG),

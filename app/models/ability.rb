@@ -6,7 +6,7 @@ class Ability
     can :read, Author
     can :read, Journal
     can :read, Category
-    can :read, Article, status: Article::STATUS_APPROVED
+    can :read, Article, status: Article::STATUS_PUBLISHED
 
     if user.role? :admin
       can :manage, :all

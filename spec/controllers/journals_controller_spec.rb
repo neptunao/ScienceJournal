@@ -151,6 +151,11 @@ describe JournalsController do
       post :create, full_params
       Journal.last.cover_image.should_not be_nil
     end
+
+    it 'change all journal articles status to published' do
+      post :create, full_params
+      Journal.last.articles.each { |a| a.status.should be Article::STATUS_PUBLISHED }
+    end
   end
 
   describe '.index' do

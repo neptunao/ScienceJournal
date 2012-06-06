@@ -24,5 +24,6 @@ class Journal < ActiveRecord::Base
 
   def after_save_action
     DataFile.destroy_unowned
+    articles.each { |a| a.update_attribute(:status, Article::STATUS_PUBLISHED) }
   end
 end

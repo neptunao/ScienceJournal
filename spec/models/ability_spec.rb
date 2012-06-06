@@ -119,9 +119,9 @@ describe 'Abilities of' do
     censor_user_ability.should be_can(:read, Journal)
   end
 
-  it 'all can read approved articles' do
+  it 'all can read published articles' do
     a2 = create_article
-    a2.update_attribute(:status, Article::STATUS_APPROVED)
+    a2.update_attribute(:status, Article::STATUS_PUBLISHED)
     guest_user_ability.should be_can(:read, a2)
     author_user_ability.should be_can(:read, a2)
     censor_user_ability.should be_can(:read, a2)
