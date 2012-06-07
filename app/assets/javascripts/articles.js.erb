@@ -1,6 +1,6 @@
 function changeVisibilityByCheckbox(checkbox_id, id) {
-  checkbox = document.getElementById(checkbox_id)
-  document.getElementById(id).style.display = checkbox.checked ? 'block' : 'none'
+    checkbox = document.getElementById(checkbox_id);
+    document.getElementById(id).style.display = checkbox.checked ? 'block' : 'none';
 }
 
 function changeVisibilityAndStatus(checkbox_id, id, hidden_id) {
@@ -8,4 +8,23 @@ function changeVisibilityAndStatus(checkbox_id, id, hidden_id) {
     changeVisibilityByCheckbox(checkbox_id, id);
     hidden_field = document.getElementById(hidden_id);
     hidden_field.value = checkbox.checked ? <%=  Article::STATUS_REJECTED_BY_CENSOR %> : <%= Article::STATUS_REVIEWED %>;
+}
+
+function fill_reject_reason(id, reject_reason) {
+    text_area = document.getElementById(id);
+    value = reject_reason != '' ?  'Censor reason:\n' + reject_reason + '\n\n' : '';
+    text_area.value = value + 'Editor reason: \n';
+}
+
+function show_and_fill(block_id, text_id, reject_reason) {
+    show(block_id);
+    fill_reject_reason(text_id, reject_reason);
+}
+
+function hide(id) {
+    document.getElementById(id).style.display = 'none';
+}
+
+function show(id) {
+    document.getElementById(id).style.display = 'block';
 }

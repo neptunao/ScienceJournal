@@ -11,13 +11,13 @@
         <div class="one_line_item">
           <%= hidden_field_tag :reject, 0 %>
           <%= check_box_tag :reject, '1', false,
-                            { id: 'reject_cb', onclick: 'changeVisibilityAndStatus("reject_cb", "reject_reason", "status_field")' } %> Reject
-        </div>
-        <div class="hidden_tag" id='reject_reason'>
-          <%= f.label :reject_reason %>
-          <%= f.text_area :reject_reason %>
+                            { id: 'reject_cb', onclick: 'changeVisibilityAndStatus("reject_cb", "reject_reason", "status_field");' } %> Reject
         </div>
     <% end %>
+    <div class="hidden_tag" id='reject_reason'>
+      <%= f.label :reject_reason %>
+      <%= f.text_area :reject_reason, id: 'reject_reason_text' %>
+    </div>
     <% if current_role? :admin %>
         <div>
           <% case @article.status %>
@@ -27,9 +27,10 @@
               <%= f.select :censor_id, options_from_collection_for_select(Censor.all, "id", "fullname") %> <br />
           <% when Article::STATUS_REVIEWED .. Article::STATUS_REJECTED_BY_CENSOR %>
               <b>Approve:</b>
-              <%= f.radio_button :status, Article::STATUS_APPROVED %> <br/>
+              <%= f.radio_button :status, Article::STATUS_APPROVED, { onclick: "hide('reject_reason');" } %> <br/>
               <b>Reject:</b>
-              <%= f.radio_button :status, Article::STATUS_REJECTED  %> <br/>
+              <%= f.radio_button :status, Article::STATUS_REJECTED, {
+                      onclick: "show_and_fill('reject_reason','reject_reason_text', '#{@article.reject_reason}');" }  %> <br/>
           <% end %>
         </div>
     <% end %>
