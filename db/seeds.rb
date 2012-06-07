@@ -30,6 +30,10 @@ author_user = User.create!(name: 'author', email: 'author1@mail.ru', password: '
                      password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.author_role.id])
 author_user.update_attribute(:person, author1)
 
+author_user1 = User.create!(name: 'author2', email: 'author2@mail.ru', password: '123456',
+                     password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.author_role.id])
+author_user1.update_attribute(:person, author2)
+
 censor_user = User.create!(name: 'censor', email: 'censor@mail.ru', password: '123456',
                      password_confirmation: '123456', role_ids: [Role.guest_role.id ,Role.censor_role.id])
 censor_user.update_attribute(:person, censor1)
