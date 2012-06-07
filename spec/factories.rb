@@ -28,8 +28,8 @@ FactoryGirl.define do
     user.after(:create) { |u| u.send :post_init }
   end
   factory :censor_user, class: 'User' do |user|
-    user.name     "Censor"
-    user.email    "censor@example.com"
+    user.sequence(:name) { |n| "Censor#{n}" }
+    user.sequence(:email) { |n| "censor#{n}@example.com" }
     user.password "foobar"
     user.password_confirmation "foobar"
     user.roles { |role| [Role.censor_role ||role.association(:censor_role)] }

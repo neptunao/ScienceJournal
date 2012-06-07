@@ -59,6 +59,9 @@ describe 'Admin' do
   it 'attach article to censor' do
     Censor.destroy_all
     censor = FactoryGirl.create(:censor)
+    censor.user = FactoryGirl.create(:censor_user)
+    censor.user.update_attribute :is_approved, true
+    censor.save!
     article = create_article(status: Article::STATUS_CREATED)
     visit edit_article_path(article)
     select censor.fullname, from: "article[censor_id]"

@@ -27,4 +27,8 @@ module ArticlesHelper
   def reject_reason_exist?
     (@article.status == Article::STATUS_REJECTED || @article.status == Article::STATUS_REJECTED_BY_CENSOR) && @article.reject_reason
   end
+
+  def approved_censors
+    Censor.select { |c| c.user && c.user.is_approved }
+  end
 end
