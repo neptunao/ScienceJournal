@@ -25,6 +25,7 @@ ScienceJournal::Application.routes.draw do
   match '/profile/show' => 'profile#show', as: :show_profile, via: :get
   match '/profile/edit_personal' => 'profile#edit_personal_info', as: :edit_personal, via: :get
   match '/profile/update' => 'profile#update', as: :update_personal, via: :put
+  match '/search' => 'search#search', via: :get
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

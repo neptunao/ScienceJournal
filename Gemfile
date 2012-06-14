@@ -45,6 +45,7 @@ gem 'devise'
 gem 'awesome_nested_set'
 gem 'haml'
 gem 'the_sortable_tree'
+gem 'texticle', :require => 'texticle/rails'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

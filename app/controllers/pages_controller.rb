@@ -4,7 +4,7 @@ class PagesController < ApplicationController
 
   def home
     @journals = Journal.all.sort_by { |j| j.created_at }.last(5).reverse
-    @articles = Article.select{ |a| a.journal_id != 0 }
+    @articles = Article.select{ |a| a.status == Article::STATUS_PUBLISHED && a.journal_id != 0 }
   end
 
   private
