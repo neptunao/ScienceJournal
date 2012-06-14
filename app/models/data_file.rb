@@ -13,7 +13,7 @@ class DataFile < ActiveRecord::Base
     path = File.join('public/data', file.original_filename)
     File.open(path, "wb") { |f| f.write(file.read) }
     filename = "data/#{file.original_filename}"
-    DataFile.create!(filename: filename, tag: tag)
+    DataFile.create(filename: filename, tag: tag)
   end
 
   private
