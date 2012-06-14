@@ -1,0 +1,21 @@
+<% if @articles %>
+    <h1>Founded articles:</h1>
+    <ul>
+      <% @articles.each do |a| %>
+        <li><%= link_to a.title, a %></li>
+      <% end %>
+    </ul>
+<% else %>
+    There is no articles for this request.
+<% end %>
+
+<% if @journals %>
+    <h1>Founded journals:</h1>
+    <ul>
+      <% @journals.each do |j| %>
+        <li><%= link_to j.name, j %></li>
+      <% end %>
+    </ul>
+<% else %>
+    There is no journals for this request.
+<% end %>
